@@ -76,7 +76,7 @@ export default function Hero({ title, subtitle, description }) {
     <motion.section
       ref={heroRef}
       style={{ heroOpacity }}
-      className="h-screen md:h-full relative bg-[linear-gradient(to_top,_#02071e,_#030c2b,_#001038,_#001245,_#051252)] text-white "
+      className="h-screen md:h-full relative bg-[linear-gradient(to_top,_#02071e,_#030c2b,_#001038,_#001245,_#051252)] "
     >
       <div className="container mx-auto  flex flex-col md:flex-row items-center">
         {/* Text Content */}

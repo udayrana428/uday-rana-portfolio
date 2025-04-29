@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function FeaturedProjects({ projects }) {
   const [scrollIndex, setScrollIndex] = useState(0);
   return (
-    <section className="py-20 bg-[_#02071E] text-white" id="projects">
+    <section className="py-20 max-w-6xl mx-auto" id="projects">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-base tracking-[.5rem] font-bold mb-4 flex items-center text-gray-300">

@@ -43,7 +43,7 @@ const CoreValues = () => {
   };
 
   return (
-    <section className="py-10 bg-[#02071E] text-white h-full" id="projects">
+    <section className="py-10 h-full max-w-6xl mx-auto" id="projects">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {coreValues.map((value, index) => (

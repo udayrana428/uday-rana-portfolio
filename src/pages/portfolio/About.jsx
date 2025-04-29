@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import { motion } from "framer-motion";
+import { IoMdArrowDropright } from "react-icons/io";
 
 import { delay } from "../../utils/helpers";
 
@@ -77,7 +78,7 @@ const mockAboutData = {
 
 export async function aboutLoader() {
   try {
-    await delay(1000);
+    // await delay(1000);
     return { about: mockAboutData };
   } catch (error) {
     throw new Error("Failed to load about data");
@@ -88,15 +89,19 @@ export default function About() {
   const { about } = useLoaderData();
 
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-auto px-4 py-36 bg-[_#02071E] text-white">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto text-center mb-16"
+        className="max-w-6xl mx-auto text-center mb-16"
       >
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">About Me</h1>
-        <p className="text-xl text-gray-600">{about.introduction}</p>
+        {/* <h1 className="text-4xl md:text-5xl font-bold mb-6">About Me</h1> */}
+        <h2 className="text-xl md:text-base tracking-[.5rem] font-bold mb-4 flex items-center text-gray-300">
+          <IoMdArrowDropright className="ml-2 text-2xl text-yellow-200" />
+          ABOUT ME
+        </h2>
+        <p className="text-xl ">{about.introduction}</p>
       </motion.div>
 
       {/* Description Section */}
@@ -104,7 +109,7 @@ export default function About() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="max-w-4xl mx-auto mb-16"
+        className="max-w-5xl mx-auto mb-16"
       >
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
@@ -118,9 +123,7 @@ export default function About() {
             />
           </div>
           <div>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {about.description}
-            </p>
+            <p className="text-lg  leading-relaxed">{about.description}</p>
           </div>
         </div>
       </motion.div>
@@ -146,7 +149,7 @@ export default function About() {
               <h3 className="text-xl font-semibold mb-2">{exp.title}</h3>
               <p className="text-gray-600 mb-1">{exp.company}</p>
               <p className="text-sm text-gray-500 mb-2">{exp.period}</p>
-              <p className="text-gray-700">{exp.description}</p>
+              <p className="">{exp.description}</p>
             </motion.div>
           ))}
         </div>
@@ -201,7 +204,7 @@ export default function About() {
                   {category.skills.map((skill, skillIndex) => (
                     <span
                       key={skillIndex}
-                      className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"
+                      className="px-3 py-1 bg-gray-100 rounded-full text-sm "
                     >
                       {skill}
                     </span>

@@ -10,7 +10,7 @@ import CoreValues from "../../components/portfolio/CoreValues";
 
 export async function homeLoader() {
   try {
-    await delay(1000);
+    // await delay(1000);
     const response = await getAllProjectsAPI();
     const featuredProjects = response.data.filter(
       (project) => project.featured
@@ -49,7 +49,7 @@ export default function Home() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen"
+      className="min-h-screen bg-[_#02071E] text-white"
     >
       <Hero {...hero} />
       <CoreValues />
