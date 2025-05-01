@@ -3,6 +3,8 @@ import * as Yup from "yup";
 import { motion } from "framer-motion";
 import ContactInfo from "../../components/portfolio/ContactInfo";
 import { sendEmail } from "../../api";
+import Button from "../../components/common/Button";
+import { useEffect } from "react";
 
 const contactSchema = Yup.object().shape({
   name: Yup.string()
@@ -28,16 +30,26 @@ export default function Contact() {
         throw new Error(response.data.message || "Failed to send message");
       }
 
+      resetForm();
       setStatus({
         success: "Message sent successfully! I'll get back to you soon.",
       });
-      resetForm();
     } catch (error) {
       setStatus({ error: error.message });
     } finally {
       setSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (status?.success || status?.error) {
+      const timer = setTimeout(() => {
+        setStatus({});
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   return (
     <div className="container mx-auto px-4 py-36 bg-[_#02071E] text-white">
@@ -78,7 +90,8 @@ export default function Contact() {
                     type="text"
                     id="name"
                     name="name"
-                    className={`w-full p-2 border rounded-md ${
+                    placeholder=""
+                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-200 placeholder:text-gray-300 text-gray-300 bg-[#080D26] ${
                       errors.name && touched.name
                         ? "border-red-500"
                         : "border-gray-300"
@@ -102,8 +115,8 @@ export default function Contact() {
                     type="email"
                     id="email"
                     name="email"
-                    className={`w-full p-2 border rounded-md ${
-                      errors.email && touched.email
+                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-200 placeholder:text-gray-300 text-gray-300 bg-[#080D26] ${
+                      errors.name && touched.name
                         ? "border-red-500"
                         : "border-gray-300"
                     }`}
@@ -127,8 +140,8 @@ export default function Contact() {
                     id="message"
                     name="message"
                     rows="5"
-                    className={`w-full p-2 border rounded-md ${
-                      errors.message && touched.message
+                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-200 placeholder:text-gray-300 text-gray-300 bg-[#080D26] ${
+                      errors.name && touched.name
                         ? "border-red-500"
                         : "border-gray-300"
                     }`}
@@ -140,10 +153,12 @@ export default function Contact() {
                   )}
                 </div>
 
-                <button
+                <Button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  isDisabled={isSubmitting}
+                  classes={
+                    "disabled:opacity-50 disabled:cursor-not-allowed w-full flex items-center justify-center"
+                  }
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center">
@@ -172,7 +187,7 @@ export default function Contact() {
                   ) : (
                     "Send Message"
                   )}
-                </button>
+                </Button>
               </Form>
             )}
           </Formik>

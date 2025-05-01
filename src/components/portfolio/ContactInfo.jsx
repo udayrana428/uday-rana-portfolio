@@ -2,7 +2,7 @@ export default function ContactInfo() {
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold">Let's Connect</h2>
-      <p className="text-gray-600">
+      <p className="text-gray-300">
         I'm always open to discussing new projects, creative ideas, or
         opportunities to be part of your visions.
       </p>

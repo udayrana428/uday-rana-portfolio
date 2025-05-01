@@ -11,8 +11,8 @@ export default function ProjectFilter({
           onClick={() => onFilterChange(category.toLowerCase())}
           className={`px-4 py-2 rounded-full ${
             activeFilter === category.toLowerCase()
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+              ? "bg-white text-black"
+              : "bg-[#080D26] text-gray-300 hover:bg-gray-200 hover:text-black"
           }`}
         >
           {category}

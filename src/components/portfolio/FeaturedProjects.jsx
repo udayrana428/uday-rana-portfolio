@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../common/Button";
 import { IoMdArrowDropright } from "react-icons/io";
 import { useState } from "react";
 
 export default function FeaturedProjects({ projects }) {
   const [scrollIndex, setScrollIndex] = useState(0);
+
+  const navigate = useNavigate();
   return (
     <section className="py-20 max-w-6xl mx-auto" id="projects">
       <div className="container mx-auto px-4">
@@ -41,7 +43,7 @@ export default function FeaturedProjects({ projects }) {
               />
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                <p className="text-gray-600 mb-4">{project.description}</p>
+                <p className="text-gray-300 mb-4">{project.description}</p>
                 {/* <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech, i) => (
                     <span
@@ -79,9 +81,7 @@ export default function FeaturedProjects({ projects }) {
           ))}
         </div>
         <div className="flex md:justify-end -mt-12 md:mr-10 ">
-          <Button>
-            <Link to="/projects">MORE PROJECTS</Link>
-          </Button>
+          <Button onClick={() => navigate("/projects")}>MORE PROJECTS</Button>
         </div>
       </div>
     </section>
