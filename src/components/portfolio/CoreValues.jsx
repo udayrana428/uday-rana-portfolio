@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import demoImage from "../../assets/textures/gltf_embedded_0.png";
+import { IoMdArrowDropright } from "react-icons/io";
 
 import { IoTerminal } from "react-icons/io5";
 import { CgIfDesign } from "react-icons/cg";
 import { CgPerformance } from "react-icons/cg";
 import { RiTeamLine } from "react-icons/ri";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 
 const CoreValues = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const sectionRef = useRef(null);
+
+  // ✅ Detect when 30% of section is visible
+  const inView = useInView(sectionRef, { amount: 0.6, once: true });
 
   const coreValues = [
     {
@@ -43,12 +48,22 @@ const CoreValues = () => {
   };
 
   return (
-    <section className="py-10 h-full max-w-6xl mx-auto" id="projects">
+    <section
+      className="py-10 h-full max-w-6xl mx-auto"
+      id="projects"
+      ref={sectionRef}
+    >
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <h2 className="text-xl md:text-xl tracking-[.5rem] font-bold mb-4 flex items-center justify-center text-gray-300">
+          <IoMdArrowDropright className="ml-2 text-2xl text-yellow-200" />
+          CORE VALUES
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {coreValues.map((value, index) => (
             <motion.div
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 100 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
               key={index}
               className={`relative rounded-md border-2 ${
                 activeIndex === index ? "border-[_#0F2258]" : "border-gray-500"

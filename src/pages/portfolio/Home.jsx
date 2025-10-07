@@ -49,7 +49,7 @@ export default function Home() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-[_#02071E] text-white"
+      className="min-h-screen "
     >
       <Hero {...hero} />
       <CoreValues />

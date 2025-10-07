@@ -52,7 +52,7 @@ export default function Contact() {
   }, [status]);
 
   return (
-    <div className="container mx-auto px-4 py-36 bg-[_#02071E] text-white">
+    <div className="container mx-auto px-4 py-36">
       <div className="grid md:grid-cols-2 gap-12">
         <ContactInfo />
         <motion.div

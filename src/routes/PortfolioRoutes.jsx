@@ -22,7 +22,7 @@ const Contact = lazy(() => import("../pages/portfolio/Contact"));
 
 import { homeLoader } from "../pages/portfolio/Home";
 import { aboutLoader } from "../pages/portfolio/About";
-import { projectsLoader } from "../pages/portfolio/Projects";
+// import { projectsLoader } from "../pages/portfolio/Projects";
 import { projectDetailsLoader } from "../pages/portfolio/ProjectDetails";
 
 const portfolioRoutes = [
@@ -48,7 +48,7 @@ const portfolioRoutes = [
           {
             index: true,
             element: <Projects />,
-            loader: projectsLoader,
+            // loader: projectsLoader,
             errorElement: <ErrorBoundary />,
           },
           {

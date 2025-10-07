@@ -1,34 +1,22 @@
 import { Link } from "react-router-dom";
+import ProjectCard from "../common/ProjectCard";
+import ProjectCardSkeleton from "../common/ProjectCardSkeleton";
 
-export default function ProjectGrid({ projects }) {
+export default function ProjectGrid({ projects, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <ProjectCardSkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-6">
       {projects.map((project) => (
-        <Link
-          key={project._id}
-          to={`/projects/${project._id}`}
-          className="card hover:shadow-lg transition-shadow bg-[_#080D26]"
-        >
-          <img
-            src={project.image || "/placeholder.svg"}
-            alt={project.title}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4 ">
-            <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-            <p className="text-gray-300 mb-4">{project.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.map((tech, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 bg-[_#02071E] rounded-full text-sm"
-                >
-                  {tech.trim()}
-                </span>
-              ))}
-            </div>
-          </div>
-        </Link>
+        <ProjectCard key={project._id} project={project} />
       ))}
     </div>
   );

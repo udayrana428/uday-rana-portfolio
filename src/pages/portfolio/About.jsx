@@ -82,7 +82,7 @@ export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto px-4 py-36 bg-[_#02071E] text-white">
+    <div className="container mx-auto px-4 py-36 ">
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

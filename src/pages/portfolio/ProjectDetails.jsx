@@ -89,10 +89,10 @@ export default function ProjectDetails() {
   const { project } = useLoaderData();
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-36">
       <Link
         to="/projects"
-        className="text-blue-600 hover:underline mb-6 inline-block"
+        className="text-yellow-200 hover:underline mb-6 inline-block"
       >
         ← Back to Projects
       </Link>
@@ -100,7 +100,7 @@ export default function ProjectDetails() {
         <ProjectGallery images={project.images} />
         <div>
           <h1 className="text-4xl font-bold mb-4">{project.title}</h1>
-          <p className="text-gray-600 mb-6">{project.description}</p>
+          <p className="text-gray-300 mb-6">{project.description}</p>
           <TechStack technologies={project.technologies} />
           <div className="flex gap-4 mt-6">
             {project.liveUrl && (

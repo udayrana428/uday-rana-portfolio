@@ -4,7 +4,7 @@ export default function ProjectFilter({
   onFilterChange,
 }) {
   return (
-    <div className="flex flex-wrap gap-4 mb-8">
+    <div className="flex flex-wrap mb-12">
       {categories.map((category) => (
         <button
           key={category}
