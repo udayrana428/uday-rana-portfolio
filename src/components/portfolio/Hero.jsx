@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   const [text, setText] = useState("");
@@ -19,7 +20,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#02071e] via-[#03113b] to-[#0a1e5e] overflow-hidden px-6">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0a1e5e] via-[#03113b] to-[#02071e] overflow-hidden px-6">
       {/* Animated background gradient or blur */}
       {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(0,183,255,0.3),transparent_60%),radial-gradient(circle_at_80%_70%,rgba(255,0,128,0.3),transparent_60%)] blur-3xl"></div> */}
 
@@ -46,32 +47,34 @@ export default function Hero() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex justify-center gap-6">
-          <motion.a
-            href="#projects"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-yellow-500 text-white rounded-full shadow-lg hover:bg-yellow-400 transition-all"
-          >
-            View My Work
-          </motion.a>
+        <div className="flex justify-center gap-6 mb-5">
+          <Link to={"/projects"}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 bg-yellow-500 text-white rounded-full shadow-lg hover:bg-yellow-400 transition-all"
+            >
+              View My Work
+            </motion.button>
+          </Link>
 
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 border-2 border-yellow-500 text-yellow-400 rounded-full hover:bg-cyan-500/10 transition-all"
-          >
-            Contact Me
-          </motion.a>
+          <Link to={"/contact"}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 border-2 border-yellow-500 text-yellow-400 rounded-full hover:bg-cyan-500/10 transition-all"
+            >
+              Contact Me
+            </motion.button>
+          </Link>
         </div>
 
         {/* Decorative text / tagline */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
+          animate={{ opacity: 0.5 }}
           transition={{ delay: 1, duration: 1 }}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-sm text-gray-400 tracking-widest uppercase"
+          className="absolute  left-1/2 transform -translate-x-1/2 text-sm text-white tracking-widest uppercase"
         >
           Building ideas into interactive realities 💡
         </motion.div>

@@ -49,7 +49,7 @@ const CoreValues = () => {
 
   return (
     <section
-      className="py-10 h-full max-w-6xl mx-auto"
+      className="py-10  max-w-6xl mx-auto"
       id="projects"
       ref={sectionRef}
     >
@@ -69,8 +69,9 @@ const CoreValues = () => {
                 activeIndex === index ? "border-[_#0F2258]" : "border-gray-500"
               } bg-[_#080D29] p-2 flex flex-col items-center gap-3 ${
                 activeIndex === index ? "py-5" : "py-16"
-              } w-full  h-fit cursor-pointer hover:scale-105 transition duration-700 overflow-hidden`}
+              } w-full  h-full cursor-pointer hover:scale-105 transition duration-700 overflow-hidden`}
               onMouseOver={() => handleShowCard(index)}
+              onMouseOut={() => handleShowCard(null)}
             >
               {activeIndex === index && (
                 <motion.img

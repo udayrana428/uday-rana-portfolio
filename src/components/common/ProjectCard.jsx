@@ -41,7 +41,7 @@ export default function ProjectCard({ project }) {
     >
       {/* Image */}
       <img
-        src={project.image || "/placeholder.svg"}
+        src={project.mainImage.url || "/placeholder.svg"}
         alt={project.title}
         className="w-full h-32 object-cover"
       />
@@ -69,7 +69,7 @@ export default function ProjectCard({ project }) {
 
         {/* Technologies */}
         <div className="flex flex-wrap gap-2">
-          {project.technologies.slice(0, 4).map((tech, index) => (
+          {project.techStack.slice(0, 4).map((tech, index) => (
             <span
               key={index}
               className="px-2 py-1 bg-[#02071E] rounded-full text-sm"
@@ -77,7 +77,7 @@ export default function ProjectCard({ project }) {
               {tech.trim()}
             </span>
           ))}
-          {project.technologies.length > 4 && (
+          {project.techStack.length > 4 && (
             <span className="px-2 py-1 bg-[#02071E] rounded-full text-sm">
               +{project.technologies.length - 4} more
             </span>

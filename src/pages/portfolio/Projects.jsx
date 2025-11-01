@@ -1,6 +1,5 @@
 import { useLoaderData } from "react-router-dom";
 import ProjectGrid from "../../components/portfolio/ProjectGrid";
-import ProjectFilter from "../../components/portfolio/ProjectFilter";
 import { useEffect, useState } from "react";
 
 import { delay } from "../../utils/helpers";
@@ -24,29 +23,31 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [categories, setCategories] = useState([
     "All",
-    "Web Development",
-    "Mobile Apps",
-    "UI/UX Design",
+    "Frontend",
+    "Backend",
+    "FullStack",
   ]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filter, setFilter] = useState("all");
+  const [filters, setFilter] = useState({ category: "", page: 1, limit: 5 });
 
-  const filteredProjects =
-    filter === "all"
-      ? projects
-      : projects.filter(
-          (project) => String(project.category).toLocaleLowerCase() === filter
-        );
+  const handleFilterChange = (category) => {
+    setFilter((prev) => ({
+      ...prev,
+      category: category.toLowerCase() === "all" ? "" : category.toLowerCase(),
+    }));
+  };
 
   useEffect(() => {
     const fetchAllProjects = async () => {
       setIsLoading(true);
-      const response = await getAllProjectsAPI();
-      if (response) setProjects(response.data);
+      const response = await getAllProjectsAPI(filters).then((res) => res.data);
+      if (response.success === true) {
+        setProjects(response.data.projects);
+      }
       setIsLoading(false);
     };
     fetchAllProjects();
-  }, []);
+  }, [filters]);
 
   return (
     <div className="container mx-auto px-4 py-36">
@@ -54,12 +55,22 @@ export default function Projects() {
         <IoMdArrowDropright className="ml-2 text-2xl text-yellow-200" />
         PROJECTS
       </h2>
-      <ProjectFilter
-        categories={categories}
-        activeFilter={filter}
-        onFilterChange={setFilter}
-      />
-      <ProjectGrid projects={filteredProjects} isLoading={isLoading} />
+      <div className="flex flex-wrap mb-12">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => handleFilterChange(category)}
+            className={`px-4 py-2 rounded-full ${
+              filters.category === category.toLowerCase()
+                ? "bg-white text-black"
+                : "bg-[#080D26] text-gray-300 hover:bg-gray-200 hover:text-black"
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+      <ProjectGrid projects={projects} isLoading={isLoading} />
     </div>
   );
 }

@@ -40,8 +40,12 @@ export const logoutUser = () => {
 
 // PROJECT API
 
-export const getAllProjectsAPI = () => {
-  return apiClient.get("/projects/fetchAllProjects");
+export const getAllProjectsAPI = (filters) => {
+  return apiClient.get("/projects/getAllProjects", { params: filters });
+};
+
+export const getFeaturedProjectsAPI = () => {
+  return apiClient.get("/projects/getFeaturedProjects");
 };
 export const createProjectAPI = (data) => {
   return apiClient.post("/projects/createProject", data);
