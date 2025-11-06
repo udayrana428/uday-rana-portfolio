@@ -52,7 +52,7 @@ export default function Contact() {
   }, [status]);
 
   return (
-    <div className="container mx-auto px-4 py-36">
+    <main className="container max-w-6xl mx-auto px-4 py-36">
       <div className="grid md:grid-cols-2 gap-12">
         <ContactInfo />
         <motion.div
@@ -69,12 +69,12 @@ export default function Contact() {
             {({ errors, touched, isSubmitting, status }) => (
               <Form className="space-y-6">
                 {status?.error && (
-                  <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+                  <div className="p-3 text-sm text-error bg-red-50 rounded-md">
                     {status.error}
                   </div>
                 )}
                 {status?.success && (
-                  <div className="p-3 text-sm text-green-600 bg-green-50 rounded-md">
+                  <div className="p-3 text-sm text-success bg-green-50 rounded-md">
                     {status.success}
                   </div>
                 )}
@@ -91,16 +91,14 @@ export default function Contact() {
                     id="name"
                     name="name"
                     placeholder=""
-                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-200 placeholder:text-gray-300 text-gray-300 bg-[#080D26] ${
+                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-brand placeholder:text-text-secondary text-text-secondary bg-surface ${
                       errors.name && touched.name
-                        ? "border-red-500"
-                        : "border-gray-300"
+                        ? "border-error"
+                        : "border-text-secondary"
                     }`}
                   />
                   {errors.name && touched.name && (
-                    <div className="mt-1 text-sm text-red-600">
-                      {errors.name}
-                    </div>
+                    <div className="mt-1 text-sm text-error">{errors.name}</div>
                   )}
                 </div>
 
@@ -115,14 +113,14 @@ export default function Contact() {
                     type="email"
                     id="email"
                     name="email"
-                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-200 placeholder:text-gray-300 text-gray-300 bg-[#080D26] ${
+                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-brand placeholder:text-text-secondary text-text-secondary bg-surface ${
                       errors.name && touched.name
-                        ? "border-red-500"
-                        : "border-gray-300"
+                        ? "border-error"
+                        : "border-text-secondary"
                     }`}
                   />
                   {errors.email && touched.email && (
-                    <div className="mt-1 text-sm text-red-600">
+                    <div className="mt-1 text-sm text-error">
                       {errors.email}
                     </div>
                   )}
@@ -140,14 +138,14 @@ export default function Contact() {
                     id="message"
                     name="message"
                     rows="5"
-                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-200 placeholder:text-gray-300 text-gray-300 bg-[#080D26] ${
+                    className={`w-full p-2 border-none  rounded-md focus:outline-none focus:ring-2 focus:ring-brand placeholder:text-text-secondary text-text-secondary bg-surface ${
                       errors.name && touched.name
-                        ? "border-red-500"
-                        : "border-gray-300"
+                        ? "border-error"
+                        : "border-text-secondary"
                     }`}
                   />
                   {errors.message && touched.message && (
-                    <div className="mt-1 text-sm text-red-600">
+                    <div className="mt-1 text-sm text-error">
                       {errors.message}
                     </div>
                   )}
@@ -163,7 +161,7 @@ export default function Contact() {
                   {isSubmitting ? (
                     <span className="flex items-center justify-center">
                       <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 "
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -193,6 +191,6 @@ export default function Contact() {
           </Formik>
         </motion.div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ProjectGallery({ images }) {
+  console.log("images", images);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => {
@@ -19,7 +20,7 @@ export default function ProjectGallery({ images }) {
         <AnimatePresence mode="wait">
           <motion.img
             key={currentImageIndex}
-            src={images[currentImageIndex]}
+            src={images[currentImageIndex]?.url}
             alt={`Project image ${currentImageIndex + 1}`}
             className="w-full h-full object-cover"
             initial={{ opacity: 0 }}
@@ -90,7 +91,7 @@ export default function ProjectGallery({ images }) {
               }`}
             >
               <img
-                src={image || "/placeholder.svg"}
+                src={image.url || "/placeholder.svg"}
                 alt={`Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover"
               />

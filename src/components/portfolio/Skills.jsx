@@ -1,137 +1,135 @@
-// SkillsSection.jsx
 import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
+import { IoMdArrowDropright } from "react-icons/io";
+import Header from "../common/Header";
 
-export default function SkillsSection() {
-  const canvasRef = useRef(null);
+gsap.registerPlugin(InertiaPlugin);
+
+export default function Skills() {
+  const rootRef = useRef(null);
+  const oldPos = useRef({ x: 0, y: 0 });
+  const delta = useRef({ x: 0, y: 0 });
+
   const skills = [
-    "React",
-    "Node.js",
-    "MongoDB",
-    "Tailwind",
-    "JavaScript",
-    "Git",
-    "HTML",
-    "CSS",
+    {
+      name: "HTML",
+      image: "/images/html.webp",
+    },
+    {
+      name: "CSS",
+      image: "/images/css.webp",
+    },
+    {
+      name: "JavaScript",
+      image: "/images/javascript.webp",
+    },
+    {
+      name: "Tailwind",
+      image: "/images/tailwindcss.webp",
+    },
+    {
+      name: "Bootstrap",
+      image: "/images/bootstrap.webp",
+    },
+    {
+      name: "React",
+      image: "/images/react.webp",
+    },
+    {
+      name: "Nodejs",
+      image: "/images/node.webp",
+    },
+    {
+      name: "Mongodb",
+      image: "/images/mongodb.webp",
+    },
+    {
+      name: "Nodejs",
+      image: "/images/redux.webp",
+    },
+    {
+      name: "Git",
+      image: "/images/git.webp",
+    },
   ];
-  const balls = [];
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    const root = rootRef.current;
 
-    class Ball {
-      constructor(x, y, r, text) {
-        this.x = x;
-        this.y = y;
-        this.r = r;
-        this.text = text;
-        this.vx = (Math.random() - 0.5) * 2;
-        this.vy = (Math.random() - 0.5) * 2;
-        this.color = "rgba(0,180,255,0.9)";
-      }
+    const handleMouseMove = (e) => {
+      delta.current.x = e.clientX - oldPos.current.x;
+      delta.current.y = e.clientY - oldPos.current.y;
 
-      draw(ctx) {
-        const gradient = ctx.createRadialGradient(
-          this.x - this.r / 3,
-          this.y - this.r / 3,
-          this.r / 6,
-          this.x,
-          this.y,
-          this.r
-        );
-        gradient.addColorStop(0, "#00ffff");
-        gradient.addColorStop(1, "#0044ff");
-
-        ctx.beginPath();
-        ctx.fillStyle = gradient;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = "rgba(0,255,255,0.8)";
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-
-        ctx.fillStyle = "white";
-        ctx.font = "bold 12px Poppins";
-        ctx.textAlign = "center";
-        ctx.fillText(this.text, this.x, this.y + 4);
-      }
-
-      update(canvas) {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // bounce off walls
-        if (this.x + this.r > canvas.width || this.x - this.r < 0)
-          this.vx *= -1;
-        if (this.y + this.r > canvas.height || this.y - this.r < 0)
-          this.vy *= -1;
-
-        this.draw(ctx);
-      }
-    }
-
-    // create balls
-    for (let i = 0; i < skills.length; i++) {
-      balls.push(
-        new Ball(
-          Math.random() * canvas.width,
-          Math.random() * canvas.height,
-          35,
-          skills[i]
-        )
-      );
-    }
-
-    let animationFrame;
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      balls.forEach((b) => b.update(canvas));
-      animationFrame = requestAnimationFrame(animate);
-    }
-    animate();
-
-    // handle drag
-    let dragging = null;
-    canvas.addEventListener("mousedown", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      balls.forEach((b) => {
-        if (Math.hypot(mouseX - b.x, mouseY - b.y) < b.r) dragging = b;
-      });
-    });
-    canvas.addEventListener("mouseup", () => (dragging = null));
-    canvas.addEventListener("mousemove", (e) => {
-      if (dragging) {
-        const rect = canvas.getBoundingClientRect();
-        dragging.x = e.clientX - rect.left;
-        dragging.y = e.clientY - rect.top;
-      }
-    });
-
-    // handle device motion (shake)
-    const handleMotion = (event) => {
-      const { x, y } = event.accelerationIncludingGravity;
-      balls.forEach((b) => {
-        b.vx += x * 0.1;
-        b.vy += y * 0.1;
-      });
+      oldPos.current.x = e.clientX;
+      oldPos.current.y = e.clientY;
     };
-    window.addEventListener("devicemotion", handleMotion);
+
+    root.addEventListener("mousemove", handleMouseMove);
+
+    const items = root.querySelectorAll(".media-item");
+    items.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        const tl = gsap.timeline({
+          onComplete: () => tl.kill(),
+        });
+        tl.timeScale(1.2);
+
+        const image = el.querySelector("img");
+        tl.to(image, {
+          inertia: {
+            x: {
+              velocity: delta.current.x * 30,
+              end: 0,
+            },
+            y: {
+              velocity: delta.current.y * 30,
+              end: 0,
+            },
+          },
+        });
+        tl.fromTo(
+          image,
+          { rotate: 0 },
+          {
+            duration: 0.4,
+            rotate: (Math.random() - 0.5) * 30,
+            yoyo: true,
+            repeat: 1,
+            ease: "power1.inOut",
+          },
+          "<"
+        );
+      });
+    });
 
     return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener("devicemotion", handleMotion);
+      root.removeEventListener("mousemove", handleMouseMove);
+      items.forEach((el) => el.replaceWith(el.cloneNode(true))); // Clean listeners
     };
   }, []);
 
   return (
-    <section className="min-h-[500px] flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 to-black text-white">
-      <h2 className="text-4xl font-bold mb-4">My Skills</h2>
-      <div className="w-[90%] md:w-[600px] h-[400px] bg-gray-900 rounded-3xl shadow-inner relative overflow-hidden border border-cyan-500/30">
-        <canvas ref={canvasRef} className="w-full h-full"></canvas>
+    <section ref={rootRef} className=" py-10 max-w-6xl mx-auto">
+      <div className="container overflow-hidden relative grid place-items-center md:h-screen">
+        {/* HEADER */}
+        <Header heading="Skills" subheading="My technical skills" />
+        {/* MEDIA GRID */}
+        <div className="grid md:grid-cols-5 gap-[4vw] max-md:gap-[10vw] max-md:grid-cols-3">
+          {skills.map((skill, idx) => (
+            <div
+              key={idx}
+              className="media-item bg-text-primary p-2 rounded-xl"
+            >
+              <img
+                src={skill.image}
+                alt=""
+                loading="lazy"
+                className="w-[8vw] h-[8vw] object-contain rounded-md pointer-events-none will-change-transform max-md:w-[20vw] max-md:h-[20vw] "
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ import { delay } from "../../utils/helpers";
 import { getAllProjectsAPI } from "../../api";
 import CoreValues from "../../components/portfolio/CoreValues";
 import { useState } from "react";
+import Testimonials from "../../components/portfolio/Testimonials";
 
 // export async function homeLoader() {
 //   try {
@@ -51,6 +52,7 @@ export default function Home() {
       <CoreValues />
       <FeaturedProjects />
       <Skills />
+      {/* <Testimonials /> */}
     </motion.main>
   );
 }

@@ -1,20 +1,38 @@
 /** @type {import('tailwindcss').Config} */
+import colors from "tailwindcss/colors";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        josefin: ["Josefin Sans", "sans-serif"],
+        rubik: ["Rubik", "sans-serif"],
+        dancing: ["Dancing Script", "cursive"],
+      },
       colors: {
-        primary: "#02071E", // e.g., blue-800
-        secondary: "#080D26", // e.g., amber-500
-        accent: "#FEF08A", // e.g., emerald-500
-        muted: "#169976", // e.g., gray-500
-        backgroundLight: "#F9FAFB", // light background
-        backgroundDark: "#222222", // dark background",
-        surface: "#FFFFFF", // for cards, inputs, etc.
-        error: "#EF4444", // red-500
-        info: "#3B82F6", // blue-500
-        success: "#22C55E", // green-500
-        warning: "#FACC15", // yellow-400
+        // 🌑 Backgrounds & Surfaces
+        background: "#02071E", // page background
+        surface: "#0b1131", // card, section, modal, etc.
+        surfaceAlt: "#7385BE", // lighter surface for contrast
+
+        // 🌈 Brand & brand
+        brand: "#FEF08A", // main brand color
+        brandDark: "#EAB308", // hover/dark variant
+        accent: "#FACC15", // secondary highlight
+
+        // 💬 Text
+        text: {
+          primary: "#ffffff", // main text
+          secondary: colors.gray[300], // muted text
+          inverse: "#111827", // on dark backgrounds
+        },
+
+        // 💡 States & Utility
+        success: "#22C55E",
+        error: "#EF4444",
+        warning: "#F59E0B",
+        info: "#3B82F6",
+        border: "#E5E7EB",
       },
     },
   },

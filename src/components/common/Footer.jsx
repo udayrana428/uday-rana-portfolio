@@ -1,11 +1,22 @@
+import { CgProfile } from "react-icons/cg";
+import {
+  FaGithub,
+  FaHome,
+  FaLinkedin,
+  FaPhone,
+  FaTwitter,
+} from "react-icons/fa";
+import { GoProject } from "react-icons/go";
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12">
+    <footer className="bg-surface py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4">Portfolio</h3>
-            <p className="text-gray-300">
+            <p className="text-text-secondary">
               Building amazing web experiences with modern technologies.
             </p>
           </div>
@@ -14,24 +25,37 @@ export default function Footer() {
               <h3 className="text-xl font-bold mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <Link to="/" className="text-text-secondary hover:text-brand">
+                    <FaHome className="mr-1 inline-block" />
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <Link
+                    to="/about"
+                    className="text-text-secondary hover:text-brand"
+                  >
+                    <CgProfile className="mr-1 inline-block" />
                     About
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <Link
+                    to="/projects"
+                    className="text-text-secondary hover:text-brand"
+                  >
+                    <GoProject className="mr-1 inline-block" />
                     Projects
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <Link
+                    to="/contact"
+                    className="text-text-secondary hover:text-brand"
+                  >
+                    <FaPhone className="mr-1 inline-block" />
                     Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -39,17 +63,32 @@ export default function Footer() {
               <h3 className="text-xl font-bold mb-4">Connect</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <a
+                    href="https://github.com/udayrana428"
+                    target="_blank"
+                    className="text-text-secondary hover:text-brand "
+                  >
+                    <FaGithub className="mr-1 inline-block" />
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <a
+                    href="https://www.linkedin.com/in/uday-rana-678879193/"
+                    target="_blank"
+                    className="text-text-secondary hover:text-brand"
+                  >
+                    <FaLinkedin className="mr-1 inline-block" />
                     LinkedIn
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-300 hover:text-yellow-200">
+                  <a
+                    href="https://x.com/udayrana428"
+                    target="_blank"
+                    className="text-text-secondary hover:text-brand"
+                  >
+                    <FaTwitter className="mr-1 inline-block" />
                     Twitter
                   </a>
                 </li>
@@ -57,8 +96,8 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-300">
-          <p>&copy; 2024 Your Portfolio. All rights reserved.</p>
+        <div className="mt-8 pt-8 border-t border-text-secondary text-center text-text-secondary">
+          <p>&copy; 2025 Uday Rana. All rights reserved.</p>
         </div>
       </div>
     </footer>

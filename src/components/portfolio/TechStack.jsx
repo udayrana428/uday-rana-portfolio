@@ -20,7 +20,7 @@ export default function TechStack({ technologies }) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Technologies Used</h2>
+      <h2 className="text-xl font-semibold font-josefin">Technologies Used</h2>
       <motion.div
         className="flex flex-wrap gap-2"
         variants={container}
@@ -31,7 +31,7 @@ export default function TechStack({ technologies }) {
           <motion.span
             key={index}
             variants={item}
-            className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
+            className="px-3 py-1 bg-surface  rounded-full text-sm font-medium hover:bg-brand hover:text-background transition-colors"
           >
             {tech}
           </motion.span>

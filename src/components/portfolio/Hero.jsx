@@ -2,11 +2,21 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { FaLongArrowAltRight } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa6";
+
 import { Link } from "react-router-dom";
 
 export default function Hero() {
   const [text, setText] = useState("");
   const fullText = "Crafting sleek & scalable web experiences.";
+
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = "/assets/resume.pdf";
+    link.download = "resume.pdf";
+    link.click();
+  };
 
   // Simple typewriter effect
   useEffect(() => {
@@ -31,30 +41,31 @@ export default function Hero() {
         className="relative z-10 text-center max-w-4xl"
       >
         {/* Title */}
-        <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4">
-          Hi, I'm <span className="text-yellow-500">Uday Rana</span>
+        <h1 className="text-4xl md:text-6xl font-bold  tracking-tight mb-4">
+          Hi, I'm <span className="text-brandDark">Uday Rana</span>
         </h1>
 
         {/* Subtitle */}
-        <h2 className="text-2xl md:text-4xl text-gray-300 font-light mb-6">
-          Frontend Developer & MERN Stack Engineer
+        <h2 className="text-3xl md:text-4xl  font-bold mb-6">
+          Frontend Engineer with MERN Stack Expertise
         </h2>
 
         {/* Typewriter effect */}
-        <p className="text-lg md:text-xl text-gray-200 h-8 mb-10">
+        <p className="text-lg md:text-xl h-8 mb-10">
           {text}
           <span className="animate-pulse">|</span>
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex justify-center gap-6 mb-5">
+        <div className="flex flex-wrap justify-center gap-6 mb-5">
           <Link to={"/projects"}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-yellow-500 text-white rounded-full shadow-lg hover:bg-yellow-400 transition-all"
+              className="px-8 py-3 bg-brandDark  rounded-full shadow-lg hover:bg-accent transition-all"
             >
-              View My Work
+              <FaLongArrowAltRight className="mr-2 inline-block" />
+              View projects
             </motion.button>
           </Link>
 
@@ -62,17 +73,27 @@ export default function Hero() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 border-2 border-yellow-500 text-yellow-400 rounded-full hover:bg-cyan-500/10 transition-all"
+              className="px-8 py-3 bg-text-primary text-background rounded-full hover:bg-brandDark hover:border-none hover:text-text-primary transition-all"
             >
+              <FaLongArrowAltRight className="mr-2 inline-block" />
               Contact Me
             </motion.button>
           </Link>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 border-2 rounded-full hover:bg-text-primary hover:border-none hover:text-background transition-all"
+            onClick={handleDownload}
+          >
+            <FaDownload className="mr-2 inline-block" />
+            Resume
+          </motion.button>
         </div>
 
         {/* Decorative text / tagline */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
+          animate={{ opacity: 0.6 }}
           transition={{ delay: 1, duration: 1 }}
           className="absolute  left-1/2 transform -translate-x-1/2 text-sm text-white tracking-widest uppercase"
         >
@@ -180,7 +201,7 @@ export default function Hero() {
 //             {subtitle}
 //           </h2>
 //           <i class="fa-solid fa-caret-up mb-5 md:mb-2"></i>
-//           <p className="text-lg md:text-xl tracking-[1rem] mb-8 text-yellow-200">
+//           <p className="text-lg md:text-xl tracking-[1rem] mb-8 text-brand">
 //             {description}
 //           </p>
 

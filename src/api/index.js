@@ -32,16 +32,20 @@ export const sendEmail = (data) => {
 // AUTH API
 
 export const loginUser = (data) => {
-  return apiClient.post("/auth/login", data);
+  return apiClient.post("/users/login", data);
 };
 export const logoutUser = () => {
-  return apiClient.post("/auth/logout");
+  return apiClient.post("/users/logout");
 };
 
 // PROJECT API
 
 export const getAllProjectsAPI = (filters) => {
   return apiClient.get("/projects/getAllProjects", { params: filters });
+};
+
+export const getProjectAPI = (projectId) => {
+  return apiClient.get(`/projects/getProject/${projectId}`); //("/projects/getProjectById", )
 };
 
 export const getFeaturedProjectsAPI = () => {

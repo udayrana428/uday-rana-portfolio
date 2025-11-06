@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { delay } from "../../utils/helpers";
 import { getAllProjectsAPI } from "../../api";
 import { IoMdArrowDropright } from "react-icons/io";
+import { useProjects } from "../../hooks/projects/useProjects";
+import Header from "../../components/common/Header";
 
 // export async function projectsLoader() {
 //   try {
@@ -20,50 +22,53 @@ import { IoMdArrowDropright } from "react-icons/io";
 
 export default function Projects() {
   // const { projects, categories } = useLoaderData();
-  const [projects, setProjects] = useState([]);
+  // const [projects, setProjects] = useState([]);
+  const [filters, setFilters] = useState({ category: "", page: 1, limit: 10 });
+
+  const { data, isLoading, error, isError } = useProjects(filters);
+
   const [categories, setCategories] = useState([
     "All",
     "Frontend",
     "Backend",
     "FullStack",
   ]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [filters, setFilter] = useState({ category: "", page: 1, limit: 5 });
+  // const [isLoading, setIsLoading] = useState(false);
 
   const handleFilterChange = (category) => {
-    setFilter((prev) => ({
+    setFilters((prev) => ({
       ...prev,
       category: category.toLowerCase() === "all" ? "" : category.toLowerCase(),
     }));
   };
 
-  useEffect(() => {
-    const fetchAllProjects = async () => {
-      setIsLoading(true);
-      const response = await getAllProjectsAPI(filters).then((res) => res.data);
-      if (response.success === true) {
-        setProjects(response.data.projects);
-      }
-      setIsLoading(false);
-    };
-    fetchAllProjects();
-  }, [filters]);
+  const projects = data?.data?.projects || [];
+
+  // useEffect(() => {
+  //   const fetchAllProjects = async () => {
+  //     setIsLoading(true);
+  //     const response = await getAllProjectsAPI(filters).then((res) => res.data);
+  //     if (response.success === true) {
+  //       setProjects(response.data.projects);
+  //     }
+  //     setIsLoading(false);
+  //   };
+  //   fetchAllProjects();
+  // }, [filters]);
 
   return (
-    <div className="container mx-auto px-4 py-36">
-      <h2 className="text-xl md:text-xl tracking-[.5rem] font-bold mb-4 flex items-center justify-center text-gray-300">
-        <IoMdArrowDropright className="ml-2 text-2xl text-yellow-200" />
-        PROJECTS
-      </h2>
-      <div className="flex flex-wrap mb-12">
+    <main className="container mx-auto px-4 py-36">
+      <Header heading="Projects" subheading="Check out my projects" />
+      <div className="flex flex-wrap gap-2 mb-12">
         {categories.map((category) => (
           <button
             key={category}
             onClick={() => handleFilterChange(category)}
             className={`px-4 py-2 rounded-full ${
+              (filters.category === "" && category.toLowerCase() === "all") ||
               filters.category === category.toLowerCase()
-                ? "bg-white text-black"
-                : "bg-[#080D26] text-gray-300 hover:bg-gray-200 hover:text-black"
+                ? "bg-text-primary text-background"
+                : "bg-surface text-text-secondary hover:bg-text-primary hover:text-background"
             }`}
           >
             {category}
@@ -71,6 +76,6 @@ export default function Projects() {
         ))}
       </div>
       <ProjectGrid projects={projects} isLoading={isLoading} />
-    </div>
+    </main>
   );
 }

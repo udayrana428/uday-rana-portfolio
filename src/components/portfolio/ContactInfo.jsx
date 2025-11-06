@@ -1,15 +1,17 @@
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+
 export default function ContactInfo() {
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold">Let's Connect</h2>
-      <p className="text-gray-300">
+      <p className="text-text-secondary font-josefin text-xl">
         I'm always open to discussing new projects, creative ideas, or
         opportunities to be part of your visions.
       </p>
       <div className="space-y-4">
         <div className="flex items-center gap-4">
           <svg
-            className="w-6 h-6 text-blue-600"
+            className="w-6 h-6 text-brand"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -25,7 +27,7 @@ export default function ContactInfo() {
         </div>
         <div className="flex items-center gap-4">
           <svg
-            className="w-6 h-6 text-blue-600"
+            className="w-6 h-6 text-brand"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -48,27 +50,30 @@ export default function ContactInfo() {
       </div>
       <div className="flex gap-4">
         <a
-          href="https://github.com/yourusername"
+          href="https://github.com/udayrana428"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-blue-600"
+          className="text-text-secondary hover:text-brand"
         >
+          <FaGithub className="mr-1 inline-block" />
           GitHub
         </a>
         <a
-          href="https://linkedin.com/in/yourusername"
+          href="https://www.linkedin.com/in/uday-rana-678879193/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-blue-600"
+          className="text-text-secondary hover:text-brand"
         >
+          <FaLinkedin className="mr-1 inline-block" />
           LinkedIn
         </a>
         <a
-          href="https://twitter.com/yourusername"
+          href="https://x.com/udayrana428"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 hover:text-blue-600"
+          className="text-text-secondary hover:text-brand"
         >
+          <FaTwitter className="mr-1 inline-block" />
           Twitter
         </a>
       </div>

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function RouteLoading() {
   return (
-    <div className="min-h-[200px] flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -16,9 +16,9 @@ export default function RouteLoading() {
               repeat: Infinity,
               ease: "linear",
             }}
-            className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full"
+            className="w-10 h-10 border-4 border-text-primary border-t-transparent rounded-full"
           />
-          <span className="text-gray-600 dark:text-gray-300">Loading...</span>
+          {/* <span className="text-gray-600 dark:text-gray-300">Loading...</span> */}
         </div>
       </motion.div>
     </div>

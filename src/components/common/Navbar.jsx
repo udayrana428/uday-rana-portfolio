@@ -14,7 +14,7 @@ export default function Navbar() {
     <nav className="bg-transparent absolute w-full z-50">
       <div className="container mx-auto px-10">
         <div className="flex justify-between items-center h-24 tracking-widest font-semibold">
-          <Link to="/" className="text-5xl transform -translate-y-2 text-white">
+          <Link to="/" className="text-5xl transform -translate-y-2 ">
             Logo
           </Link>
 
@@ -24,8 +24,8 @@ export default function Navbar() {
               to="/"
               className={({ isActive }) =>
                 isActive
-                  ? "text-yellow-200"
-                  : "text-gray-200 hover:text-yellow-200"
+                  ? "text-brand hover:text-brandDark"
+                  : " hover:text-brand"
               }
             >
               HOME
@@ -33,9 +33,7 @@ export default function Navbar() {
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                isActive
-                  ? "text-yellow-200"
-                  : "text-gray-200 hover:text-yellow-200"
+                isActive ? "text-brand" : " hover:text-brand"
               }
             >
               ABOUT
@@ -43,9 +41,7 @@ export default function Navbar() {
             <NavLink
               to="/projects"
               className={({ isActive }) =>
-                isActive
-                  ? "text-yellow-200"
-                  : "text-gray-200 hover:text-yellow-200"
+                isActive ? "text-brand" : " hover:text-brand"
               }
             >
               PROJECTS
@@ -53,9 +49,7 @@ export default function Navbar() {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                isActive
-                  ? "text-yellow-200"
-                  : "text-gray-200 hover:text-yellow-200"
+                isActive ? "text-brand" : " hover:text-brand"
               }
             >
               CONTACT
@@ -63,10 +57,7 @@ export default function Navbar() {
           </div>
 
           {/* Hamburger */}
-          <button
-            className="md:hidden text-white text-2xl"
-            onClick={toggleMenu}
-          >
+          <button className="md:hidden  text-2xl" onClick={toggleMenu}>
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
@@ -78,21 +69,18 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 100, duration: 0.2 }}
-            className="fixed top-0 right-0 h-full w-full transform bg-[#080D26] flex flex-col items-start justify-center  space-y-12 px-10"
+            className="fixed top-0 right-0 h-full w-full transform bg-surface flex flex-col items-start justify-center  space-y-12 px-10"
           >
             <div className="flex justify-between absolute top-20 left-0 px-5 w-full">
               <Link
                 to="/"
                 onClick={() => setIsOpen(false)}
-                className="text-5xl transform -translate-y-2 text-white"
+                className="text-5xl transform -translate-y-2 "
               >
                 Logo
               </Link>
               {/* Hamburger */}
-              <button
-                className="md:hidden text-white text-2xl"
-                onClick={toggleMenu}
-              >
+              <button className="md:hidden  text-2xl" onClick={toggleMenu}>
                 {isOpen ? <X size={28} /> : <Menu size={28} />}
               </button>
             </div>
@@ -104,9 +92,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
                   `text-5xl w-full ${
-                    isActive
-                      ? "text-yellow-200"
-                      : "text-gray-200 hover:text-yellow-200"
+                    isActive ? "text-brand" : " hover:text-brand"
                   }`
                 }
               >

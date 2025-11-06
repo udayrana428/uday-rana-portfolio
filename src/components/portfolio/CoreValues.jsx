@@ -8,6 +8,7 @@ import { CgPerformance } from "react-icons/cg";
 import { RiTeamLine } from "react-icons/ri";
 
 import { motion, useInView } from "framer-motion";
+import Header from "../common/Header";
 
 const CoreValues = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -54,10 +55,7 @@ const CoreValues = () => {
       ref={sectionRef}
     >
       <div className="container mx-auto px-4">
-        <h2 className="text-xl md:text-xl tracking-[.5rem] font-bold mb-4 flex items-center justify-center text-gray-300">
-          <IoMdArrowDropright className="ml-2 text-2xl text-yellow-200" />
-          CORE VALUES
-        </h2>
+        <Header heading="Core Values" subheading="What drives me" />
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {coreValues.map((value, index) => (
             <motion.div
@@ -67,7 +65,7 @@ const CoreValues = () => {
               key={index}
               className={`relative rounded-md border-2 ${
                 activeIndex === index ? "border-[_#0F2258]" : "border-gray-500"
-              } bg-[_#080D29] p-2 flex flex-col items-center gap-3 ${
+              } bg-surface p-2 flex flex-col items-center gap-3 ${
                 activeIndex === index ? "py-5" : "py-16"
               } w-full  h-full cursor-pointer hover:scale-105 transition duration-700 overflow-hidden`}
               onMouseOver={() => handleShowCard(index)}
@@ -84,8 +82,8 @@ const CoreValues = () => {
                 />
               )}
               {activeIndex !== index &&
-                value.icon({ className: "text-7xl mb-3 text-[_#7385BE]" })}
-              <motion.h2 className="text-yellow-200 tracking-widest text-center">
+                value.icon({ className: "text-7xl mb-3 text-surfaceAlt" })}
+              <motion.h2 className="text-brand tracking-widest text-center">
                 {value.title}
               </motion.h2>
               {/* Bottom bar animation only on hover */}

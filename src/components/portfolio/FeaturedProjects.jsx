@@ -6,10 +6,14 @@ import Button from "../common/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { getFeaturedProjectsAPI } from "../../api";
 import ProjectCardSkeleton from "../common/ProjectCardSkeleton";
+import { useFeaturedProjects } from "../../hooks/projects/useProjects";
+import Header from "../common/Header";
 
 export default function FeaturedProjects() {
   const [featuredProjects, setFeaturedProjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+
+  const { data, isLoading, error } = useFeaturedProjects();
 
   const containerRef = useRef(null);
   const navigate = useNavigate();
@@ -41,7 +45,7 @@ export default function FeaturedProjects() {
         <Link key={project._id || index} to={`/projects/${project._id}`}>
           <motion.div
             key={project._id || index}
-            className="flex-shrink-0 w-72 h-96 bg-[#080D29] rounded-2xl overflow-hidden border border-gray-700 shadow-xl"
+            className="flex-shrink-0 w-72 h-96 bg-surface rounded-2xl overflow-hidden hover:border hover:shadow-lg hover:shadow-brand border-text-secondary"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -50,12 +54,12 @@ export default function FeaturedProjects() {
               alt={project.title}
               className="h-48 w-full object-cover"
             />
-            <div className="p-4 text-white flex flex-col justify-between h-[calc(100%-12rem)]">
+            <div className="p-4 flex flex-col justify-between h-[calc(100%-12rem)]">
               <div>
-                <h3 className="font-semibold text-lg text-yellow-200 mb-2">
+                <h3 className="font-semibold text-lg text-brand mb-2">
                   {project.title}
                 </h3>
-                <p className="text-sm text-gray-300 line-clamp-3">
+                <p className="text-sm text-text-secondary line-clamp-3">
                   {project.description}
                 </p>
               </div>
@@ -65,7 +69,7 @@ export default function FeaturedProjects() {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1 bg-yellow-200 text-black rounded text-xs font-medium hover:bg-yellow-300 transition"
+                    className="px-3 py-1 border border-brand text-brand rounded rounded-xl text-xs font-medium hover:bg-brand hover:text-background transition"
                   >
                     Live Demo
                   </a>
@@ -75,7 +79,7 @@ export default function FeaturedProjects() {
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1 border border-gray-400 text-gray-300 rounded text-xs hover:bg-gray-700 transition"
+                    className="px-3 py-1 border border-text-primary  rounded rounded-xl text-xs"
                   >
                     Code
                   </a>
@@ -88,35 +92,34 @@ export default function FeaturedProjects() {
     [featuredProjects]
   );
 
-  // useEffect(async () => {
-  //   // Filter projects to only show those with liveUrl
-  //   const projects = await getAllProjectsAPI();
-  //   const filteredProjects = projects.filter((project) => project.liveUrl);
-  //   setFeaturedProjects(filteredProjects);
+  useEffect(() => {
+    console.log("Data: ", data);
+    if (data) {
+      setFeaturedProjects(data.data.data.projects);
+    }
+  }, [data]);
+
+  // useEffect(() => {
+  //   const fetchProjects = async () => {
+  //     setIsLoading(true);
+  //     const response = await getFeaturedProjectsAPI().then((res) => res.data);
+  //     if (response.success === true) {
+  //       setFeaturedProjects(response.data.projects);
+  //     }
+  //     setIsLoading(false);
+  //   };
+  //   fetchProjects();
   // }, []);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setIsLoading(true);
-      const response = await getFeaturedProjectsAPI().then((res) => res.data);
-      if (response.success === true) {
-        setFeaturedProjects(response.data.projects);
-      }
-      setIsLoading(false);
-    };
-    fetchProjects();
-  }, []);
-
   // if (isLoading) return;
+
+  if (featuredProjects.length === 0) return;
 
   return (
     <section ref={containerRef} className="relative h-[300vh] " id="projects">
       {/* Sticky viewport section */}
       <div className="sticky top-0 h-screen flex flex-col justify-center items-center overflow-hidden">
-        <h2 className="text-xl md:text-xl tracking-[.5rem] font-bold mb-4 flex items-center justify-center text-gray-300">
-          <IoMdArrowDropright className="ml-2 text-2xl text-yellow-200" />
-          FEATURED PROJECTS
-        </h2>
+        <Header heading="Projects" subheading="Check out my work" />
 
         {/* Horizontal sliding cards */}
         <div className="relative w-full h-[400px] overflow-visible">

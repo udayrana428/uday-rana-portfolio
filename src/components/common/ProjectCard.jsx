@@ -30,10 +30,10 @@ export default function ProjectCard({ project }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="
-        bg-[#080D26] rounded-xl shadow-lg overflow-hidden 
+        bg-surface rounded-xl shadow-lg overflow-hidden 
         transition-transform duration-300 ease-out 
         [transform-style:preserve-3d] 
-        hover:shadow-2xl hover:scale-[1.05] md:w-64 place-self-center
+        hover:shadow-2xl hover:scale-[1.05] md:w-80 place-self-center
       "
       style={{
         perspective: "1000px",
@@ -48,18 +48,18 @@ export default function ProjectCard({ project }) {
 
       {/* Card Content */}
       <div className="p-4">
-        <h3 className="text-xl font-semibold mb-2 text-yellow-200 hover:text-yellow-500">
+        <h3 className="text-lg font-semibold mb-2 hover:text-brand">
           <Link to={`/projects/${project._id}`}>{project.title}</Link>
         </h3>
 
-        <p className="text-gray-300 mb-4">
+        <p className="text-text-secondary mb-4 font-josefin">
           {project.description.slice(0, 50)}
           {project.description.split(" ").length > 8 && (
             <>
               ...{" "}
               <Link
                 to={`/projects/${project._id}`}
-                className="text-yellow-400 hover:underline"
+                className="text-brand hover:underline"
               >
                 more
               </Link>
@@ -72,13 +72,13 @@ export default function ProjectCard({ project }) {
           {project.techStack.slice(0, 4).map((tech, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-[#02071E] rounded-full text-sm"
+              className="px-2 py-1 bg-background rounded-full text-sm"
             >
               {tech.trim()}
             </span>
           ))}
           {project.techStack.length > 4 && (
-            <span className="px-2 py-1 bg-[#02071E] rounded-full text-sm">
+            <span className="px-2 py-1 bg-background rounded-full text-sm">
               +{project.technologies.length - 4} more
             </span>
           )}
