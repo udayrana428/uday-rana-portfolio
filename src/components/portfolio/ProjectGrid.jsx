@@ -16,7 +16,7 @@ export default function ProjectGrid({ projects, isLoading }) {
   if (projects.length === 0) {
     return (
       <div className="flex justify-center items-center">
-        <p className="text-xl">No projects found.</p>
+        <p className="text-3xl font-josefin text-brand">Launching Soon...</p>
       </div>
     );
   }

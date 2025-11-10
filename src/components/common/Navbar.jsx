@@ -14,7 +14,10 @@ export default function Navbar() {
     <nav className="bg-transparent absolute w-full z-50">
       <div className="container mx-auto px-10">
         <div className="flex justify-between items-center h-24 tracking-widest font-semibold">
-          <Link to="/" className="text-5xl transform -translate-y-2 ">
+          <Link
+            to="/"
+            className="text-5xl transform -translate-y-2 font-dancing"
+          >
             Logo
           </Link>
 
@@ -83,7 +86,7 @@ export default function Navbar() {
               <Link
                 to="/"
                 onClick={() => setIsOpen(false)}
-                className="text-5xl transform -translate-y-2 "
+                className="text-5xl transform -translate-y-2 font-dancing"
               >
                 Logo
               </Link>

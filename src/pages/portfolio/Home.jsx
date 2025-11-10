@@ -9,6 +9,7 @@ import { getAllProjectsAPI } from "../../api";
 import CoreValues from "../../components/portfolio/CoreValues";
 import { useState } from "react";
 import Testimonials from "../../components/portfolio/Testimonials";
+import { Helmet } from "react-helmet-async";
 
 // export async function homeLoader() {
 //   try {
@@ -42,17 +43,35 @@ export default function Home() {
   // const { hero, featuredProjects, skills } = useLoaderData();
 
   return (
-    <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen "
-    >
-      <Hero />
-      <CoreValues />
-      <FeaturedProjects />
-      <Skills />
-      {/* <Testimonials /> */}
-    </motion.main>
+    <>
+      <Helmet>
+        <title>Uday Rana | Full Stack Developer</title>
+        <meta
+          name="description"
+          content="Portfolio of Uday Rana – Full Stack Developer specializing in React, Node.js, TailwindCSS and modern web development."
+        />
+        <link rel="canonical" href="https://uday-rana-portfolio.vercel.app/" />
+
+        <meta property="og:title" content="Uday Rana | Full Stack Developer" />
+        <meta
+          property="og:description"
+          content="Explore my projects, skills and experience."
+        />
+        <meta property="og:type" content="website" />
+      </Helmet>
+
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen "
+      >
+        <Hero />
+        <CoreValues />
+        <FeaturedProjects />
+        <Skills />
+        {/* <Testimonials /> */}
+      </motion.main>
+    </>
   );
 }

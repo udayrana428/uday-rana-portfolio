@@ -22,7 +22,7 @@ export default function ProjectGallery({ images }) {
             key={currentImageIndex}
             src={images[currentImageIndex]?.url}
             alt={`Project image ${currentImageIndex + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDeleteProject } from "../../hooks/projects/useProjects";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 // import { useProjects } from "../../context/ProjectContext";
 
@@ -31,10 +32,12 @@ export default function ProjectCard({ project, onEdit }) {
         className="w-full h-48 object-cover"
       />
       <div className="p-4">
-        <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-        <p className="text-text-secondary mb-4 font-josefin">
+        <Link to={`/projects/${project._id}`}>
+          <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+        </Link>
+        {/* <p className="text-text-secondary mb-4 font-josefin">
           {project.description}
-        </p>
+        </p> */}
         <div className="flex justify-between items-center">
           <button onClick={() => onEdit(project)} className="text-2xl ">
             <FaEdit className="text" />

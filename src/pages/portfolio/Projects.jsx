@@ -7,6 +7,7 @@ import { getAllProjectsAPI } from "../../api";
 import { IoMdArrowDropright } from "react-icons/io";
 import { useProjects } from "../../hooks/projects/useProjects";
 import Header from "../../components/common/Header";
+import { Helmet } from "react-helmet-async";
 
 // export async function projectsLoader() {
 //   try {
@@ -57,25 +58,42 @@ export default function Projects() {
   // }, [filters]);
 
   return (
-    <main className="container mx-auto px-4 py-36">
-      <Header heading="Projects" subheading="Check out my projects" />
-      <div className="flex flex-wrap gap-2 mb-12">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => handleFilterChange(category)}
-            className={`px-4 py-2 rounded-full ${
-              (filters.category === "" && category.toLowerCase() === "all") ||
-              filters.category === category.toLowerCase()
-                ? "bg-text-primary text-background"
-                : "bg-surface text-text-secondary hover:bg-text-primary hover:text-background"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-      <ProjectGrid projects={projects} isLoading={isLoading} />
-    </main>
+    <>
+      <Helmet>
+        <title>Projects | Uday Rana</title>
+        <meta
+          name="description"
+          content="Browse the complete list of projects developed by Uday Rana, including real-time bots, frontend applications, admin dashboards and full-stack solutions."
+        />
+        <link
+          rel="canonical"
+          href="https://uday-rana-portfolio.vercel.app/projects"
+        />
+
+        <meta property="og:title" content="Projects | Uday Rana" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+
+      <main className="container mx-auto px-4 py-36">
+        <Header heading="Projects" subheading="Check out my projects" />
+        <div className="flex flex-wrap gap-2 mb-12">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => handleFilterChange(category)}
+              className={`px-4 py-2 rounded-full ${
+                (filters.category === "" && category.toLowerCase() === "all") ||
+                filters.category === category.toLowerCase()
+                  ? "bg-text-primary text-background"
+                  : "bg-surface text-text-secondary hover:bg-text-primary hover:text-background"
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+        <ProjectGrid projects={projects} isLoading={isLoading} />
+      </main>
+    </>
   );
 }
