@@ -48,7 +48,11 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      error.response?.data.message === "jwt expired" &&
+      !originalRequest._retry
+    ) {
       // Avoid refresh during logout request
       if (originalRequest.url.includes("/logout")) {
         return Promise.reject(error);

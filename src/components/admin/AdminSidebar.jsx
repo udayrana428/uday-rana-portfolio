@@ -52,6 +52,17 @@ export default function AdminSidebar() {
           Dashboard
         </NavLink>
         <NavLink
+          to="/"
+          onClick={() => setShowSidebar(false)}
+          className={({ isActive }) =>
+            `block p-2 rounded-lg ${
+              isActive ? "bg-surfaceAlt" : "hover:bg-background"
+            }`
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
           to="/admin/projects"
           onClick={() => setShowSidebar(false)}
           className={({ isActive }) =>

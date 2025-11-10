@@ -32,14 +32,19 @@ export default function Login() {
     return <Navigate to="/admin" replace />;
   }
 
-  const handleLogin = async (data, { setSubmitting }) => {
+  const handleLogin = async (data, { setSubmitting, resetForm, setStatus }) => {
     setIsSubmitting(true);
     setSubmitting(true);
-    const success = await login(data);
-    setSubmitting(false);
-    setIsSubmitting(false);
-    if (success) {
-      navigate("/admin");
+    try {
+      const success = await login(data);
+      if (success) {
+        navigate("/admin");
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -67,7 +72,7 @@ export default function Login() {
           {({ errors, touched, getFieldProps }) => (
             <Form className="mt-8 space-y-6">
               {error && (
-                <div className="p-3 text-sm text-error bg-red-50  rounded-md">
+                <div className="p-3 text-sm text-error bg-background  rounded-md text-center">
                   {error}
                 </div>
               )}
