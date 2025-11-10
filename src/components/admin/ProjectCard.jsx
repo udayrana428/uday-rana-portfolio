@@ -1,15 +1,20 @@
 import { useState } from "react";
-import { useProjects } from "../../context/ProjectContext";
+import { useDeleteProject } from "../../hooks/projects/useProjects";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
+// import { useProjects } from "../../context/ProjectContext";
 
 export default function ProjectCard({ project, onEdit }) {
-  const { deleteProject } = useProjects();
+  // const { deleteProject } = useProjects();
+  const deleteProject = useDeleteProject();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this project?")) {
       setIsDeleting(true);
       try {
-        await deleteProject(project._id);
+        await deleteProject.mutateAsync(project._id);
       } catch (error) {
         alert(error.message);
       } finally {
@@ -19,25 +24,27 @@ export default function ProjectCard({ project, onEdit }) {
   };
 
   return (
-    <div className="card">
+    <div className="card bg-surface">
       <img
-        src={project.image || "/placeholder.svg"}
+        src={project?.mainImage?.url || "/placeholder.svg"}
         alt={project.title}
         className="w-full h-48 object-cover"
       />
       <div className="p-4">
         <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-        <p className="text-gray-600 mb-4">{project.description}</p>
+        <p className="text-text-secondary mb-4 font-josefin">
+          {project.description}
+        </p>
         <div className="flex justify-between items-center">
-          <button onClick={() => onEdit(project)} className="btn btn-primary">
-            Edit
+          <button onClick={() => onEdit(project)} className="text-2xl ">
+            <FaEdit className="text" />
           </button>
           <button
             onClick={handleDelete}
             disabled={isDeleting}
-            className="btn btn-secondary"
+            className="text-2xl"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? "Deleting..." : <MdDelete />}
           </button>
         </div>
       </div>

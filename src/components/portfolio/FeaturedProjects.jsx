@@ -45,7 +45,7 @@ export default function FeaturedProjects() {
         <Link key={project._id || index} to={`/projects/${project._id}`}>
           <motion.div
             key={project._id || index}
-            className="flex-shrink-0 w-72 h-96 bg-surface rounded-2xl overflow-hidden hover:border hover:shadow-lg hover:shadow-brand border-text-secondary"
+            className="flex-shrink-0 w-72 h-96 bg-surface rounded overflow-hidden hover:border hover:shadow-lg hover:shadow-brand border-text-secondary "
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -63,7 +63,25 @@ export default function FeaturedProjects() {
                   {project.description}
                 </p>
               </div>
-              <div className="flex gap-2 mt-3">
+
+              {/* Technologies */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {project.techStack.slice(0, 4).map((tech, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-background rounded-full text-sm"
+                  >
+                    {tech.trim()}
+                  </span>
+                ))}
+                {project.techStack.length > 4 && (
+                  <span className="px-2 py-1 bg-background rounded-full text-sm">
+                    +{project.techStack.length - 4} more
+                  </span>
+                )}
+              </div>
+              {/* URL */}
+              {/* <div className="flex gap-2 mt-3">
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
@@ -84,7 +102,7 @@ export default function FeaturedProjects() {
                     Code
                   </a>
                 )}
-              </div>
+              </div> */}
             </div>
           </motion.div>
         </Link>

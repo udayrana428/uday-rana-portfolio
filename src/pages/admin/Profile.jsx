@@ -36,9 +36,9 @@ export default function Profile() {
   };
 
   return (
-    <div>
+    <main>
       <h1 className="text-2xl font-bold mb-6">Profile Settings</h1>
-      <div className="card p-6 max-w-2xl">
+      <div className=" p-6 max-w-2xl bg-surface">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -82,11 +82,11 @@ export default function Profile() {
               className="w-full p-2 border rounded"
             />
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn bg-surfaceAlt">
             Save Changes
           </button>
         </form>
       </div>
-    </div>
+    </main>
   );
 }

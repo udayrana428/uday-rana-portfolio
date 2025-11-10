@@ -4,11 +4,13 @@ export default function AdminHeader() {
   const { user } = useAuth();
 
   return (
-    <header className="bg-white shadow-md p-4">
+    <header className="bg-surface shadow-md p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Welcome, {user?.username}</h1>
+        <h1 className="text-xl font-semibold font-josefin">
+          Welcome, {user?.username}
+        </h1>
         <div className="flex items-center gap-4">
-          <span className="text-gray-600">{user?.email}</span>
+          <span className="">{user?.email}</span>
           <img
             src={`https://ui-avatars.com/api/?name=${user?.name}`}
             alt="Profile"

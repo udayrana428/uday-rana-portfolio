@@ -4,7 +4,7 @@ import Projects from "../pages/admin/Projects";
 import ProjectsError from "../pages/admin/ProjectsError";
 import ErrorPage from "../pages/ErrorPage";
 import NotFound from "../pages/NotFound";
-import { projectsLoader } from "../pages/admin/Projects";
+// import { projectsLoader } from "../pages/admin/Projects";
 // import { projectAction } from "../components/admin/ProjectForm";
 
 // Lazy load other admin pages
@@ -24,7 +24,7 @@ const adminRoutes = [
       {
         path: "projects",
         element: <Projects />,
-        loader: projectsLoader,
+        // loader: projectsLoader,
         // action: projectAction,
         errorElement: <ProjectsError />,
       },

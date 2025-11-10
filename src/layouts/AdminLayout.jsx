@@ -6,18 +6,12 @@ import AdminHeader from "../components/admin/AdminHeader";
 import RouteLoading from "../components/common/RouteLoading";
 
 export default function AdminLayout() {
-  const { user } = useAuth();
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
   return (
     <div className="min-h-screen flex">
       <AdminSidebar />
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col h-screen">
         <AdminHeader />
-        <main className="p-6">
+        <main className="flex-1 p-6  overflow-y-auto">
           <Suspense fallback={<RouteLoading />}>
             <Outlet />
           </Suspense>

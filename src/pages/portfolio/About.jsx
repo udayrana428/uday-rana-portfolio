@@ -8,7 +8,7 @@ import Header from "../../components/common/Header";
 
 const mockAboutData = {
   introduction:
-    "Hi, I'm a passionate Frontend Engineer specializing in the MERN stack with 1 years of hands-on experience in building responsive, user-centric, and scalable web applications. I focus on crafting seamless interfaces, optimizing performance, and delivering engaging digital experiences through clean, maintainable code and modern development practices.",
+    "Hi, I'm Uday Rana - a passionate Frontend Engineer specializing in the MERN stack with 1 years of hands-on experience in building responsive, user-centric, and scalable web applications. I focus on crafting seamless interfaces, optimizing performance, and delivering engaging digital experiences through clean, maintainable code and modern development practices.",
   description:
     "I specialize in building scalable web applications using cutting-edge technologies. My journey in software development started with a curiosity about how things work on the internet, and it has evolved into a passion for creating elegant solutions to complex problems. I believe in writing clean, maintainable code and creating intuitive user experiences.",
   image:
@@ -62,8 +62,8 @@ const mockAboutData = {
       skills: ["Node.js", "Express", "MongoDB", "PostgreSQL", "REST APIs"],
     },
     {
-      category: "DevOps & Tools",
-      skills: ["Git", "Docker", "AWS", "CI/CD", "Jest", "Webpack"],
+      category: "Tools & Technologies",
+      skills: ["Git", "Postman", "CI/CD", "Jest", "Webpack"],
     },
   ],
 };

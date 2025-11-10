@@ -1,4 +1,9 @@
-import { useLoaderData, Link, useParams } from "react-router-dom";
+import {
+  useLoaderData,
+  Link,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import ProjectGallery from "../../components/portfolio/ProjectGallery";
 import TechStack from "../../components/portfolio/TechStack";
 import { FaExternalLinkAlt } from "react-icons/fa";

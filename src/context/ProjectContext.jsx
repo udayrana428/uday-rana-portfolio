@@ -14,23 +14,23 @@ export function ProjectProvider({ children }) {
   const [error, setError] = useState(null);
 
   // Fetch all projects on mount
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await getAllProjectsAPI();
-        setProjects(response.data);
-      } catch (error) {
-        console.error("Failed to fetch projects:", error);
-        setError(error.message || "Failed to fetch projects");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchProjects = async () => {
+  //     setIsLoading(true);
+  //     setError(null);
+  //     try {
+  //       const response = await getAllProjectsAPI();
+  //       setProjects(response.data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch projects:", error);
+  //       setError(error.message || "Failed to fetch projects");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchProjects();
-  }, []);
+  //   fetchProjects();
+  // }, []);
 
   const addProject = async (project) => {
     setIsLoading(true);

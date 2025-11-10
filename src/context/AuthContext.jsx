@@ -1,53 +1,57 @@
 import { createContext, useContext, useState, useEffect } from "react";
-
+import * as API from "../api/index";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    try {
-      // Get both user and token from localStorage
-      const savedUser = localStorage.getItem("user");
-      const savedToken = localStorage.getItem("token");
-
-      // Only restore if both exist
-      if (savedUser && savedToken) {
-        return {
-          loggedInUser: JSON.parse(savedUser),
-          token: savedToken,
-        };
-      }
-      return null;
-    } catch (error) {
-      console.error("Error reading from localStorage:", error);
-      return null;
-    }
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [accessToken, setAccessToken] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
   // Update localStorage when user state changes
   useEffect(() => {
-    try {
-      if (user && user.loggedInUser && user.token) {
-        localStorage.setItem("user", JSON.stringify(user.loggedInUser));
-        localStorage.setItem("token", user.token);
-      } else {
+    const initAuth = async () => {
+      try {
+        const response = await API.refreshTokenAPI();
+        console.log("response", response);
+        if (response.data.success) {
+          await API.setAccessToken(response.data?.data?.accessToken);
+          setAccessToken(response.data?.data?.accessToken);
+
+          const userResponse = await API.currentUserAPI();
+          setUser(userResponse.data.data);
+          localStorage.setItem("user", JSON.stringify(userResponse.data.data));
+        }
+      } catch (error) {
+        console.log("No valid refresh token or expired session.");
+        setUser(null);
         localStorage.removeItem("user");
-        localStorage.removeItem("token");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error writing to localStorage:", error);
-    }
-  }, [user]);
+    };
+
+    initAuth();
+  }, []);
 
   const login = async (data) => {
     setIsLoading(true);
     try {
       // Ensure data has the expected structure
-      if (!data.loggedInUser || !data.token) {
-        throw new Error("Invalid login data structure");
+      const response = await API.loginUserAPI(data).then((res) => res.data);
+      if (!response.success) {
+        throw new Error(
+          response.data.message || "Login failed. Please try again."
+        );
       }
-      setUser(data);
+
+      setUser(response.data.user);
+      setAccessToken(response.data.accessToken);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      API.setAccessToken(response.data.accessToken);
       return true;
     } catch (error) {
       console.error("Login error:", error);
@@ -57,15 +61,26 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      // Optionally call backend to clear refresh cookie
+      await API.logoutUserAPI({ withCredentials: true });
+    } catch (error) {
+      console.warn("Logout API failed, proceeding with local cleanup:", error);
+    } finally {
+      // Always clear local state, even if API fails due to expired JWT
+      setUser(null);
+      setAccessToken(null);
+      localStorage.removeItem("user");
+      API.setAccessToken(null);
+    }
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user: user?.loggedInUser || null,
-        token: user?.token || null,
+        user,
+        accessToken,
         isLoading,
         login,
         logout,
@@ -83,3 +98,10 @@ export function useAuth() {
   }
   return context;
 }
+
+// ✅ Access tokens → sent in memory
+// ✅ Refresh tokens → sent in HTTP-only cookies
+// ✅ Refresh requests must NOT go through global interceptors
+// ✅ Dedicated axios instance for refresh
+// ✅ Auto 401 → refresh → replay request
+// ✅ If refresh fails → logout + redirect

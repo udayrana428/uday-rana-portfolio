@@ -1,384 +1,443 @@
 import { useState, useCallback } from "react";
-import { useProjects } from "../../context/ProjectContext";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
 import { Upload, X } from "lucide-react";
+import {
+  useCreateProject,
+  useUpdateProject,
+} from "../../hooks/projects/useProjects";
 
+// ✅ Validation Schema (aligned with backend)
 const projectSchema = Yup.object().shape({
-  title: Yup.string()
-    .min(3, "Title must be at least 3 characters")
-    .required("Title is required"),
-  description: Yup.string()
-    .min(10, "Description must be at least 10 characters")
-    .required("Description is required"),
+  title: Yup.string().min(3).required("Title is required"),
+  description: Yup.string().min(10).required("Description is required"),
   category: Yup.string().required("Category is required"),
-  images: Yup.array().min(1, "At least one image is required"),
-  technologies: Yup.string().required("At least one technology is required"),
-  liveUrl: Yup.string().url("Must be a valid URL"),
+  techStack: Yup.string().required("At least one tech stack item is required"),
+  tags: Yup.string(),
+  mainImage: Yup.mixed().test(
+    "required",
+    "Main image is required",
+    function (value) {
+      // allow URL or File
+      return value && (typeof value === "string" || value instanceof File);
+    }
+  ),
+  subImages: Yup.array(),
   githubUrl: Yup.string().url("Must be a valid URL"),
-  featured: Yup.boolean(),
-  status: Yup.string()
-    .oneOf(["unpublished", "published"])
-    .required("Status is required"),
+  liveUrl: Yup.string().url("Must be a valid URL"),
+  isFeatured: Yup.boolean(),
+  isPublished: Yup.boolean(),
 });
 
 export default function ProjectForm({ project, onSuccess }) {
-  const { addProject, updateProject } = useProjects();
+  // Mutation hooks
+  const createProject = useCreateProject();
+  const updateProject = useUpdateProject();
+
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadedImages, setUploadedImages] = useState(project?.images || []);
 
-  const handleImageUpload = useCallback(
+  // ✅ Local state for images
+  const [mainImage, setMainImage] = useState(project?.mainImage?.url || "");
+  const [subImages, setSubImages] = useState(
+    project?.subImages?.map((img) => img.url) || []
+  );
+
+  // ✅ Upload function (Cloudinary)
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "portfolio-project-image-preset");
+    formData.append("folder", "Portfolio");
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/dfoeedczp/image/upload`,
+      { method: "POST", body: formData }
+    );
+    const data = await res.json();
+    return data.secure_url;
+  };
+
+  // ✅ Handle Main Image Upload
+  const handleMainImageUpload = useCallback(async (e, setFieldValue) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const url = await uploadImage(file);
+      setMainImage(url);
+      setFieldValue("mainImage", url);
+    } catch {
+      setError("Failed to upload main image");
+    }
+  }, []);
+
+  // ✅ Handle Sub Images Upload
+  const handleSubImageUpload = useCallback(
     async (e, setFieldValue) => {
       const files = Array.from(e.target.files);
-
       try {
-        const uploadPromises = files.map(async (file) => {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("upload_preset", "portfolio-project-image-preset"); // Replace with your Cloudinary upload preset
-          formData.append("folder", "Portfolio");
-
-          const response = await fetch(
-            `https://api.cloudinary.com/v1_1/dfoeedczp/image/upload`, // Replace with your cloud name
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
-
-          const data = await response.json();
-          return data.secure_url;
-        });
-
-        const newImageUrls = await Promise.all(uploadPromises);
-        const updatedImages = [...uploadedImages, ...newImageUrls];
-        setUploadedImages(updatedImages);
-        setFieldValue("images", updatedImages);
-      } catch (error) {
-        setError("Failed to upload images. Please try again.");
+        const urls = await Promise.all(files.map((f) => uploadImage(f)));
+        const updated = [...subImages, ...urls];
+        setSubImages(updated);
+        setFieldValue("subImages", updated);
+      } catch {
+        setError("Failed to upload images");
       }
     },
-    [uploadedImages]
+    [subImages]
   );
 
-  const removeImage = useCallback(
-    (indexToRemove, setFieldValue) => {
-      const updatedImages = uploadedImages.filter(
-        (_, index) => index !== indexToRemove
-      );
-      setUploadedImages(updatedImages);
-      setFieldValue("images", updatedImages);
-    },
-    [uploadedImages]
-  );
+  const removeSubImage = (index, setFieldValue, values) => {
+    const updatedFiles = values.subImages.filter((_, i) => i !== index);
+    const updatedPreview = subImages.filter((_, i) => i !== index);
 
+    setSubImages(updatedPreview);
+    setFieldValue("subImages", updatedFiles);
+  };
+
+  // ✅ Initial Values
   const initialValues = project
     ? {
         ...project,
-        technologies: Array.isArray(project.technologies)
-          ? project.technologies.join(", ")
-          : project.technologies,
-        images: project.images || [],
+        techStack: Array.isArray(project.techStack)
+          ? project.techStack.join(", ")
+          : project.techStack || "",
+        tags: Array.isArray(project.tags)
+          ? project.tags.join(", ")
+          : project.tags || "",
+        mainImage: project.mainImage?.url || "",
+        subImages: project.subImages?.map((i) => i.url) || [],
       }
     : {
         title: "",
         description: "",
-        category: "Web Development",
-        images: [],
-        technologies: "",
-        liveUrl: "",
+        category: "frontend",
+        techStack: "",
+        tags: "",
+        mainImage: null,
+        subImages: [],
         githubUrl: "",
-        featured: false,
-        status: "unpublished",
+        liveUrl: "",
+        isFeatured: false,
+        isPublished: false,
       };
 
+  const handleFileChange = (e, setFieldValue, fieldName) => {
+    const files = Array.from(e.target.files);
+
+    if (fieldName === "mainImage") {
+      const file = files[0];
+      setMainImage(URL.createObjectURL(file));
+      setFieldValue("mainImage", file); // <-- single File, not array
+    } else if (fieldName === "subImages") {
+      setSubImages((prev) => [
+        ...prev,
+        ...files.map((f) => URL.createObjectURL(f)),
+      ]);
+      setFieldValue("subImages", files); // this can stay as array
+    }
+  };
+
+  // ✅ Submit Handler
   const handleSubmit = async (values, { setSubmitting }) => {
     setIsSubmitting(true);
     setError(null);
 
     try {
-      const formattedData = {
-        ...values,
-        technologies: values.technologies.split(",").map((tech) => tech.trim()),
-        images: values.images,
-        image: values.images[0], // Set first image as main thumbnail
-      };
+      // const formattedData = {
+      //   ...values,
+      //   techStack: values.techStack.split(",").map((s) => s.trim()),
+      //   tags: values.tags ? values.tags.split(",").map((s) => s.trim()) : [],
+      //   mainImage: { url: values.mainImage },
+      //   subImages: values.subImages.map((url) => ({ url })),
+      // };
 
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("category", values.category);
+      if (values.liveUrl) formData.append("liveUrl", values.liveUrl || "");
+      if (values.githubUrl)
+        formData.append("githubUrl", values.githubUrl || "");
+      formData.append("isFeatured", values.isFeatured);
+      formData.append("isPublished", values.isPublished);
+
+      // Convert comma-separated fields
+      const techStackArray = values.techStack.split(",").map((t) => t.trim());
+      const tagsArray = values.tags.split(",").map((t) => t.trim());
+      formData.append("techStack", JSON.stringify(techStackArray));
+      formData.append("tags", JSON.stringify(tagsArray));
+
+      // Files
+      if (values.mainImage && values.mainImage instanceof File) {
+        formData.append("mainImage", values.mainImage);
+      }
+      values.subImages?.forEach((item) => {
+        if (item instanceof File) {
+          formData.append("subImages", item);
+        }
+      });
       if (project) {
-        await updateProject(project._id, formattedData);
+        await updateProject.mutateAsync({ projectId: project._id, formData });
       } else {
-        await addProject(formattedData);
+        await createProject.mutateAsync(formData);
       }
 
       onSuccess?.();
-    } catch (error) {
-      setError(error.message || "Failed to save project. Please try again.");
+    } catch (err) {
+      setError(err.message || "Failed to save project");
     } finally {
       setIsSubmitting(false);
       setSubmitting(false);
     }
   };
 
+  // ✅ Form Layout
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={projectSchema}
+      validateOnMount={false}
       onSubmit={handleSubmit}
     >
       {({ errors, touched, getFieldProps, setFieldValue, isValid }) => (
-        <Form className="space-y-6">
+        <Form className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          {/* Error Banner */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-3 text-sm text-red-600 bg-red-50 rounded-md"
+              className="col-span-2 p-3 text-sm text-error bg-background rounded-md"
             >
               {error}
             </motion.div>
           )}
 
+          {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium mb-2">
-              Project Title
-            </label>
+            <label className="block text-sm mb-2 font-medium">Title</label>
             <Field
               type="text"
-              id="title"
               {...getFieldProps("title")}
-              className={`w-full p-2 border rounded-md ${
+              className={`w-full p-2 border-2 bg-background rounded-md ${
                 errors.title && touched.title
-                  ? "border-red-500"
-                  : "border-gray-300"
+                  ? "border-error"
+                  : "border-surfaceAlt"
               }`}
             />
             {errors.title && touched.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <div className="mt-1 text-sm text-error">{errors.title}</div>
             )}
           </div>
 
+          {/* Category */}
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium mb-2"
+            <label className="block text-sm mb-2 font-medium">Category</label>
+            <Field
+              as="select"
+              {...getFieldProps("category")}
+              className="w-full p-2 border-2 rounded-md bg-background border-surfaceAlt"
             >
+              <option>Frontend</option>
+              <option>Backend</option>
+              <option>Fullstack</option>
+            </Field>
+            {errors.category && touched.category && (
+              <div className="mt-1 text-sm text-error">{errors.category}</div>
+            )}
+          </div>
+
+          {/* Description */}
+          <div className="col-span-2">
+            <label className="block text-sm mb-2 font-medium">
               Description
             </label>
             <Field
               as="textarea"
-              id="description"
               rows="4"
               {...getFieldProps("description")}
-              className={`w-full p-2 border rounded-md ${
+              className={`w-full p-2 border-2 bg-background rounded-md ${
                 errors.description && touched.description
-                  ? "border-red-500"
-                  : "border-gray-300"
+                  ? "border-error"
+                  : "border-surfaceAlt"
               }`}
             />
             {errors.description && touched.description && (
-              <p className="mt-1 text-sm text-red-600">{errors.description}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium mb-2"
-            >
-              Category
-            </label>
-            <Field
-              as="select"
-              id="category"
-              {...getFieldProps("category")}
-              className="w-full p-2 border rounded-md"
-            >
-              <option value="Web Development">Web Development</option>
-              <option value="Mobile Apps">Mobile Apps</option>
-              <option value="UI/UX Design">UI/UX Design</option>
-            </Field>
-            {errors.category && touched.category && (
-              <p className="mt-1 text-sm text-red-600">{errors.category}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="images" className="block text-sm font-medium mb-2">
-              Project Images
-            </label>
-            <div className="space-y-4">
-              {uploadedImages.length > 0 && (
-                <div className="grid grid-cols-2 gap-4">
-                  {uploadedImages.map((url, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={url || "/placeholder.svg"}
-                        alt={`Project image ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-md"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index, setFieldValue)}
-                        className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="flex items-center justify-center w-full">
-                <label className="w-full flex flex-col items-center px-4 py-6 bg-white rounded-lg border-2 border-dashed border-gray-300 cursor-pointer hover:border-gray-400">
-                  <Upload className="w-8 h-8 text-gray-400" />
-                  <span className="mt-2 text-sm text-gray-500">
-                    Click to upload images
-                  </span>
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => handleImageUpload(e, setFieldValue)}
-                  />
-                </label>
+              <div className="mt-1 text-sm text-error">
+                {errors.description}
               </div>
-            </div>
-            {errors.images && touched.images && (
-              <p className="mt-1 text-sm text-red-600">{errors.images}</p>
             )}
           </div>
 
+          {/* Tech Stack */}
           <div>
-            <label
-              htmlFor="technologies"
-              className="block text-sm font-medium mb-2"
-            >
-              Technologies (comma-separated)
+            <label className="block text-sm mb-2 font-medium">
+              Tech Stack (comma-separated)
             </label>
             <Field
               type="text"
-              id="technologies"
-              {...getFieldProps("technologies")}
-              className={`w-full p-2 border rounded-md ${
-                errors.technologies && touched.technologies
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
+              {...getFieldProps("techStack")}
               placeholder="React, Node.js, MongoDB"
-            />
-            {errors.technologies && touched.technologies && (
-              <p className="mt-1 text-sm text-red-600">{errors.technologies}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="liveUrl" className="block text-sm font-medium mb-2">
-              Live URL
-            </label>
-            <Field
-              type="url"
-              id="liveUrl"
-              {...getFieldProps("liveUrl")}
-              className={`w-full p-2 border rounded-md ${
-                errors.liveUrl && touched.liveUrl
-                  ? "border-red-500"
-                  : "border-gray-300"
+              className={`w-full p-2 border-2 bg-background rounded-md ${
+                errors.techStack && touched.techStack
+                  ? "border-error"
+                  : "border-surfaceAlt"
               }`}
             />
-            {errors.liveUrl && touched.liveUrl && (
-              <p className="mt-1 text-sm text-red-600">{errors.liveUrl}</p>
+            {errors.techStack && touched.techStack && (
+              <div className="mt-1 text-sm text-error">{errors.techStack}</div>
             )}
           </div>
 
+          {/* Tags */}
           <div>
-            <label
-              htmlFor="githubUrl"
-              className="block text-sm font-medium mb-2"
-            >
-              GitHub URL
+            <label className="block text-sm mb-2 font-medium">
+              Tags (comma-separated)
             </label>
             <Field
+              type="text"
+              {...getFieldProps("tags")}
+              placeholder="Frontend, Portfolio"
+              className="w-full p-2 border-2 rounded-md bg-background border-surfaceAlt"
+            />
+            {errors.tags && touched.tags && (
+              <div className="mt-1 text-sm text-error">{errors.tags}</div>
+            )}
+          </div>
+
+          {/* Main Image */}
+          <div className="col-span-2">
+            <label className="block text-sm mb-2 font-medium">Main Image</label>
+            {mainImage ? (
+              <div className="relative w-32">
+                <img
+                  src={mainImage}
+                  alt="Main"
+                  className="rounded-md object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMainImage("");
+                    setFieldValue("mainImage", "");
+                  }}
+                  className="absolute top-1 right-1 bg-error text-white p-1 rounded-full"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <label className="flex items-center justify-center border-2 border-dashed border-surfaceAlt p-4 rounded-lg cursor-pointer">
+                <Upload className="w-6 h-6 text-gray-400" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={(e) =>
+                    handleFileChange(e, setFieldValue, "mainImage")
+                  }
+                />
+              </label>
+            )}
+            {errors.mainImage && touched.mainImage && (
+              <div className="mt-1 text-sm text-error">{errors.mainImage}</div>
+            )}
+          </div>
+
+          {/* Sub Images */}
+          <div className="col-span-2">
+            <label className="block text-sm mb-2 font-medium">Sub Images</label>
+            <div className="flex flex-wrap gap-3">
+              {subImages.map((url, i) => (
+                <div key={i} className="relative">
+                  <img
+                    src={url}
+                    className="w-24 h-24 rounded-md object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeSubImage(i, setFieldValue)}
+                    className="absolute top-1 right-1 bg-error text-white p-1 rounded-full"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+              <label className="flex items-center justify-center w-24 h-24 border-2 border-dashed border-surfaceAlt rounded-lg cursor-pointer">
+                <Upload className="w-6 h-6 text-gray-400" />
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  hidden
+                  onChange={(e) =>
+                    handleFileChange(e, setFieldValue, "subImages")
+                  }
+                />
+              </label>
+              {errors.subImages && touched.subImages && (
+                <div className="mt-1 text-sm text-error">
+                  {errors.subImages}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Links */}
+          <div>
+            <label className="block text-sm mb-2 font-medium">GitHub URL</label>
+            <Field
               type="url"
-              id="githubUrl"
               {...getFieldProps("githubUrl")}
-              className={`w-full p-2 border rounded-md ${
-                errors.githubUrl && touched.githubUrl
-                  ? "border-red-500"
-                  : "border-gray-300"
-              }`}
+              className="w-full p-2 border-2 rounded-md bg-background border-surfaceAlt"
             />
             {errors.githubUrl && touched.githubUrl && (
-              <p className="mt-1 text-sm text-red-600">{errors.githubUrl}</p>
+              <div className="mt-1 text-sm text-error">{errors.githubUrl}</div>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm mb-2 font-medium">Live URL</label>
+            <Field
+              type="url"
+              {...getFieldProps("liveUrl")}
+              className="w-full p-2 border-2 rounded-md bg-background border-surfaceAlt"
+            />
+            {errors.liveUrl && touched.liveUrl && (
+              <div className="mt-1 text-sm text-error">{errors.liveUrl}</div>
             )}
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Status */}
+          <div className="col-span-2 flex items-center gap-6">
             <label className="flex items-center gap-2">
-              <Field
-                type="checkbox"
-                name="featured"
-                className="rounded border-gray-300"
-              />
-              <span className="text-sm font-medium">Featured Project</span>
+              <Field type="checkbox" name="isFeatured" />
+              Featured
             </label>
 
             <label className="flex items-center gap-2">
-              <Field
-                type="radio"
-                name="status"
-                value="unpublished"
-                className="border-gray-300"
-              />
-              <span className="text-sm font-medium">Unpublished</span>
+              <Field type="checkbox" name="isPublished" />
+              Published
             </label>
-
-            <label className="flex items-center gap-2">
-              <Field
-                type="radio"
-                name="status"
-                value="published"
-                className="border-gray-300"
-              />
-              <span className="text-sm font-medium">Published</span>
-            </label>
+            {errors.name && touched.name && (
+              <div className="mt-1 text-sm text-error">{errors.name}</div>
+            )}
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting || !isValid}
-            className="w-full btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Saving...
-              </span>
-            ) : project ? (
-              "Update Project"
-            ) : (
-              "Add Project"
-            )}
-          </button>
+          {/* Submit */}
+          <div className="col-span-2">
+            <button
+              type="submit"
+              disabled={isSubmitting || !isValid}
+              className="btn border-2 border-surfaceAlt w-full disabled:opacity-50"
+            >
+              {isSubmitting
+                ? "Saving..."
+                : project
+                ? "Update Project"
+                : "Add Project"}
+            </button>
+          </div>
         </Form>
       )}
     </Formik>

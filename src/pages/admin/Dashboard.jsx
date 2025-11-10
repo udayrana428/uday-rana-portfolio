@@ -1,23 +1,24 @@
-import { useProjects } from "../../context/ProjectContext";
+import { useProjects } from "../../hooks/projects/useProjects";
 
 export default function Dashboard() {
-  const { projects } = useProjects();
+  const { data } = useProjects();
+  const projects = data?.projects || [];
 
   return (
-    <div>
+    <main>
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card p-6">
+        <div className="card p-6 bg-surface">
           <h2 className="text-xl font-semibold mb-2">Total Projects</h2>
           <p className="text-3xl font-bold text-blue-600">{projects.length}</p>
         </div>
-        <div className="card p-6">
+        <div className="card p-6 bg-surface">
           <h2 className="text-xl font-semibold mb-2">Published Projects</h2>
           <p className="text-3xl font-bold text-green-600">
             {projects.filter((p) => p.status === "published").length}
           </p>
         </div>
-        <div className="card p-6">
+        <div className="card p-6 bg-surface">
           <h2 className="text-xl font-semibold mb-2">Draft Projects</h2>
           <p className="text-3xl font-bold text-gray-600">
             {projects.filter((p) => p.status === "draft").length}
@@ -40,6 +41,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

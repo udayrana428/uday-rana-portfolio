@@ -4,16 +4,19 @@ import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-
 import { delay } from "../../utils/helpers";
-import { loginUser } from "../../api";
+
+import Button from "../../components/common/Button";
 
 const loginSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(3, "Username must be at least 3 characters")
-    .required("Username is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
   password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
+    .min(
+      6,
+      "Password must contain at least one uppercase, one lowercase, one number and one special character"
+    )
     .required("Password is required"),
 });
 
@@ -29,86 +32,71 @@ export default function Login() {
     return <Navigate to="/admin" replace />;
   }
 
-  const handleLogin = async (values, { setSubmitting }) => {
+  const handleLogin = async (data, { setSubmitting }) => {
     setIsSubmitting(true);
-    setError(null);
-    try {
-      console.log("loginFormData", values);
-      const response = await loginUser(values);
-
-      console.log("response", response);
-      const success = await login(response.data);
-      await delay(500);
-      if (success) {
-        navigate("/admin");
-      }
-    } catch (error) {
-      setError(error.message || "Login failed. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-      setSubmitting(false);
+    setSubmitting(true);
+    const success = await login(data);
+    setSubmitting(false);
+    setIsSubmitting(false);
+    if (success) {
+      navigate("/admin");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg"
+        className="max-w-md w-full space-y-8 bg-surface p-8 rounded-xl shadow-lg"
       >
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold">
             Admin Login
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm ">
             Sign in to access your dashboard
           </p>
         </div>
 
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{ email: "", password: "" }}
           validationSchema={loginSchema}
           onSubmit={handleLogin}
         >
           {({ errors, touched, getFieldProps }) => (
             <Form className="mt-8 space-y-6">
               {error && (
-                <div className="p-3 text-sm text-red-600 bg-red-50 rounded-md">
+                <div className="p-3 text-sm text-error bg-red-50  rounded-md">
                   {error}
                 </div>
               )}
 
               <div className="rounded-md shadow-sm space-y-4">
                 <div>
-                  <label
-                    htmlFor="username"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Username
+                  <label htmlFor="email" className="block text-sm font-medium ">
+                    Email
                   </label>
                   <input
-                    id="username"
-                    type="text"
-                    autoComplete="username"
-                    {...getFieldProps("username")}
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    {...getFieldProps("email")}
                     className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
-                      errors.username && touched.username
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    } rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
+                      errors.email && touched.email
+                        ? "border-error"
+                        : "border-text-secondary"
+                    } bg-background rounded-md focus:outline-none focus:ring-brand focus:border-brand focus:z-10 sm:text-sm`}
                   />
-                  {errors.username && touched.username && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.username}
-                    </p>
+                  {errors.email && touched.email && (
+                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
                   )}
                 </div>
 
                 <div>
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium "
                   >
                     Password
                   </label>
@@ -122,7 +110,7 @@ export default function Login() {
                         errors.password && touched.password
                           ? "border-red-500"
                           : "border-gray-300"
-                      } rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
+                      } bg-background rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
                     />
                     <button
                       type="button"
@@ -175,10 +163,10 @@ export default function Login() {
               </div>
 
               <div>
-                <button
+                <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  classes="group relative w-full flex justify-center py-2 px-4  disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center">
@@ -207,7 +195,7 @@ export default function Login() {
                   ) : (
                     "Sign in"
                   )}
-                </button>
+                </Button>
               </div>
             </Form>
           )}

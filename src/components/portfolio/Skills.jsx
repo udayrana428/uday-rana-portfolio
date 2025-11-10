@@ -2,6 +2,19 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
 import { IoMdArrowDropright } from "react-icons/io";
+import { IoLogoHtml5 } from "react-icons/io5";
+import { IoLogoCss3 } from "react-icons/io5";
+import { IoLogoJavascript } from "react-icons/io5";
+import { SiTailwindcss } from "react-icons/si";
+import { FaBootstrap } from "react-icons/fa";
+import { IoLogoReact } from "react-icons/io5";
+import { IoLogoNodejs } from "react-icons/io5";
+import { SiMongodb } from "react-icons/si";
+import { BiLogoTypescript } from "react-icons/bi";
+
+import { FaGitAlt } from "react-icons/fa";
+import { IoLogoGithub } from "react-icons/io5";
+
 import Header from "../common/Header";
 
 gsap.registerPlugin(InertiaPlugin);
@@ -15,42 +28,52 @@ export default function Skills() {
     {
       name: "HTML",
       image: "/images/html.webp",
+      icon: IoLogoHtml5,
     },
     {
       name: "CSS",
       image: "/images/css.webp",
+      icon: IoLogoCss3,
     },
     {
       name: "JavaScript",
       image: "/images/javascript.webp",
+      icon: IoLogoJavascript,
+    },
+    {
+      name: "TypeScript",
+      image: "/images/redux.webp", // need to change
+      icon: BiLogoTypescript,
     },
     {
       name: "Tailwind",
       image: "/images/tailwindcss.webp",
+      icon: SiTailwindcss,
     },
     {
       name: "Bootstrap",
       image: "/images/bootstrap.webp",
+      icon: FaBootstrap,
     },
     {
       name: "React",
       image: "/images/react.webp",
+      icon: IoLogoReact,
     },
     {
       name: "Nodejs",
       image: "/images/node.webp",
+      icon: IoLogoNodejs,
     },
     {
       name: "Mongodb",
       image: "/images/mongodb.webp",
-    },
-    {
-      name: "Nodejs",
-      image: "/images/redux.webp",
+      icon: SiMongodb,
     },
     {
       name: "Git",
       image: "/images/git.webp",
+      icon: FaGitAlt,
     },
   ];
 
@@ -75,7 +98,7 @@ export default function Skills() {
         });
         tl.timeScale(1.2);
 
-        const image = el.querySelector("img");
+        const image = el.querySelector("svg");
         tl.to(image, {
           inertia: {
             x: {
@@ -116,19 +139,26 @@ export default function Skills() {
         <Header heading="Skills" subheading="My technical skills" />
         {/* MEDIA GRID */}
         <div className="grid md:grid-cols-5 gap-[4vw] max-md:gap-[10vw] max-md:grid-cols-3">
-          {skills.map((skill, idx) => (
-            <div
-              key={idx}
-              className="media-item bg-text-primary p-2 rounded-xl"
-            >
-              <img
+          {skills.map((skill, idx) => {
+            const Icon = skill.icon || IoMdArrowDropright;
+            return (
+              <div
+                key={idx}
+                className="media-item group bg- p-2 rounded-xl items-center justify-center flex flex-col"
+              >
+                {/* <img
                 src={skill.image}
                 alt=""
                 loading="lazy"
                 className="w-[8vw] h-[8vw] object-contain rounded-md pointer-events-none will-change-transform max-md:w-[20vw] max-md:h-[20vw] "
-              />
-            </div>
-          ))}
+              /> */}
+                <Icon className="text-7xl hover:text-brand" />
+                <p className="text-center mt-4 opacity-0 text-brand group-hover:opacity-100 transition transition-opacity ease-in duration-300">
+                  {skill.name}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

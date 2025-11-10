@@ -30,10 +30,10 @@ export default function ProjectCard({ project }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="
-        bg-surface rounded-xl shadow-lg overflow-hidden 
+        bg-surface rounded shadow-lg overflow-hidden 
         transition-transform duration-300 ease-out 
         [transform-style:preserve-3d] 
-        hover:shadow-2xl hover:scale-[1.05] md:w-80 place-self-center
+        hover:shadow-2xl hover:scale-[1.05] md:w-80 place-self-center h-full
       "
       style={{
         perspective: "1000px",
@@ -79,7 +79,7 @@ export default function ProjectCard({ project }) {
           ))}
           {project.techStack.length > 4 && (
             <span className="px-2 py-1 bg-background rounded-full text-sm">
-              +{project.technologies.length - 4} more
+              +{project.techStack.length - 4} more
             </span>
           )}
         </div>

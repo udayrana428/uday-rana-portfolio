@@ -54,6 +54,14 @@ export default function Navbar() {
             >
               CONTACT
             </NavLink>
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                isActive ? "text-brand" : " hover:text-brand"
+              }
+            >
+              ADMIN
+            </NavLink>
           </div>
 
           {/* Hamburger */}
@@ -99,6 +107,11 @@ export default function Navbar() {
                 {item.toUpperCase()}
               </NavLink>
             ))}
+            <NavLink to="/login" onClick={() => setIsOpen(false)}>
+              <button className="text-5xl w-full hover:text-brand">
+                ADMIN
+              </button>
+            </NavLink>
           </motion.div>
         )}
       </AnimatePresence>
