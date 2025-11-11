@@ -20,8 +20,15 @@ export default function ProjectGallery({ images }) {
         <AnimatePresence mode="wait">
           <motion.img
             key={currentImageIndex}
-            src={images[currentImageIndex]?.url}
+            src={`${images[currentImageIndex]?.url}?w=400&f=webp&q=auto`}
+            srcSet={`
+                ${images[currentImageIndex]?.url}?w=400&f=webp&q=auto 400w,
+                ${images[currentImageIndex]?.url}?w=800&f=webp&q=auto 800w,
+                ${images[currentImageIndex]?.url}?w=1200&f=webp&q=auto 1200w
+              `}
+            sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
             alt={`Project image ${currentImageIndex + 1}`}
+            loading="lazy"
             className="w-full h-full object-contain"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -91,8 +98,15 @@ export default function ProjectGallery({ images }) {
               }`}
             >
               <img
-                src={image.url || "/placeholder.svg"}
+                src={`${image?.url}?w=400&f=webp&q=auto`}
+                srcSet={`
+                ${image?.url}?w=400&f=webp&q=auto 400w,
+                ${image?.url}?w=800&f=webp&q=auto 800w,
+                ${image?.url}?w=1200&f=webp&q=auto 1200w
+              `}
+                sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
                 alt={`Thumbnail ${index + 1}`}
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             </button>

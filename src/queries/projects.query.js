@@ -11,8 +11,8 @@ export const projectsQuery = (filters) => {
   return queryOptions({
     queryKey: ["projects", filters],
     queryFn: () => getAllProjectsAPI(filters).then((res) => res.data),
-    // staleTime: 1000 * 60 * 5,
-    staleTime: 0,
+    staleTime: 1000 * 60 * 5,
+    // staleTime: 0,
     cacheTime: 1000 * 60 * 5,
   });
 };
@@ -21,8 +21,8 @@ export const projectByIdQuery = (id) => {
   return queryOptions({
     queryKey: ["project", id],
     queryFn: () => getProjectAPI(id).then((res) => res.data),
-    // staleTime: 1000 * 60 * 5,
-    staleTime: 0,
+    staleTime: 1000 * 60 * 5,
+    // staleTime: 0,
   });
 };
 

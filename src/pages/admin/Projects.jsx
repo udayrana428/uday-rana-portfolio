@@ -9,6 +9,7 @@ import { adminProjectsQuery } from "../../queries/projects.query";
 import { IoMdAdd } from "react-icons/io";
 import { MdGridView } from "react-icons/md";
 import { MdOutlineCalendarViewDay } from "react-icons/md";
+import ProjectCardSkeleton from "../../components/common/ProjectCardSkeleton";
 
 // export async function projectsLoader() {
 //   try {
@@ -41,10 +42,6 @@ export default function Projects() {
     setShowForm(false);
     setSelectedProject(null);
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <main>
@@ -92,16 +89,21 @@ export default function Projects() {
         </div>
       )}
       <div className="text-center mt-10">
-        {!projects.length && <p>No Projects Added.</p>}
+        {!isLoading && !projects.length && <p>No Projects Added.</p>}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project._id}
-            project={project}
-            onEdit={handleEdit}
-          />
-        ))}
+        {isLoading &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <ProjectCardSkeleton key={i} />
+          ))}
+        {!isLoading &&
+          projects.map((project) => (
+            <ProjectCard
+              key={project._id}
+              project={project}
+              onEdit={handleEdit}
+            />
+          ))}
       </div>
     </main>
   );

@@ -2,25 +2,23 @@ import React from "react";
 
 const ProjectCardSkeleton = () => {
   return (
-    <div
-      className="
-        bg-surface rounded-xl shadow-lg overflow-hidden
-        animate-pulse md:w-64 place-self-center
-      "
-    >
+    <div className=" rounded-xl shadow-md overflow-hidden animate-pulse md:w-64 place-self-center">
       {/* Image placeholder */}
-      <div className="w-full h-32 bg-background" />
+      <div className="w-full h-40 bg-text-secondary" />
 
       {/* Content placeholder */}
       <div className="p-4 space-y-3">
-        <div className="h-5 bg-background rounded w-3/4" />
-        <div className="h-4 bg-background rounded w-full" />
-        <div className="h-4 bg-background rounded w-5/6" />
+        {/* Title */}
+        <div className="h-5 bg-text-secondary rounded w-3/4" />
+        {/* Description */}
+        <div className="h-4 bg-text-secondary rounded w-full" />
+        <div className="h-4 bg-text-secondary rounded w-5/6" />
 
+        {/* Tech tags */}
         <div className="flex flex-wrap gap-2 mt-3">
-          <div className="px-4 py-2 bg-background rounded-full w-16 h-6" />
-          <div className="px-4 py-2 bg-background rounded-full w-20 h-6" />
-          <div className="px-4 py-2 bg-background rounded-full w-14 h-6" />
+          <div className="h-6 w-16 bg-text-secondary rounded-full" />
+          <div className="h-6 w-20 bg-text-secondary rounded-full" />
+          <div className="h-6 w-14 bg-text-secondary rounded-full" />
         </div>
       </div>
     </div>

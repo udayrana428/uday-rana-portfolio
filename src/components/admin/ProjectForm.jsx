@@ -43,6 +43,7 @@ export default function ProjectForm({ project, onSuccess }) {
   const [subImages, setSubImages] = useState(
     project?.subImages?.map((img) => img.url) || []
   );
+  const [removedSubImages, setRemovedSubImages] = useState([]);
 
   // ✅ Upload function (Cloudinary)
   const uploadImage = async (file) => {
@@ -89,10 +90,15 @@ export default function ProjectForm({ project, onSuccess }) {
   );
 
   const removeSubImage = (index, setFieldValue, values) => {
-    const updatedFiles = values.subImages.filter((_, i) => i !== index);
-    const updatedPreview = subImages.filter((_, i) => i !== index);
+    const removed = values.subImages[index];
 
-    setSubImages(updatedPreview);
+    // only track already uploaded images
+    if (removed?.publicId) {
+      // already uploaded image
+      setRemovedSubImages((prev) => [...prev, removed.publicId]);
+    }
+    const updatedFiles = values.subImages.filter((_, i) => i !== index);
+    setSubImages((prev) => prev.filter((_, i) => i !== index));
     setFieldValue("subImages", updatedFiles);
   };
 
@@ -107,7 +113,7 @@ export default function ProjectForm({ project, onSuccess }) {
           ? project.tags.join(", ")
           : project.tags || "",
         mainImage: project.mainImage?.url || "",
-        subImages: project.subImages?.map((i) => i.url) || [],
+        subImages: project.subImages || [],
       }
     : {
         title: "",
@@ -168,6 +174,7 @@ export default function ProjectForm({ project, onSuccess }) {
       const tagsArray = values.tags.split(",").map((t) => t.trim());
       formData.append("techStack", JSON.stringify(techStackArray));
       formData.append("tags", JSON.stringify(tagsArray));
+      formData.append("removedSubImages", JSON.stringify(removedSubImages));
 
       // Files
       if (values.mainImage && values.mainImage instanceof File) {
@@ -201,7 +208,7 @@ export default function ProjectForm({ project, onSuccess }) {
       validateOnMount={false}
       onSubmit={handleSubmit}
     >
-      {({ errors, touched, getFieldProps, setFieldValue, isValid }) => (
+      {({ errors, touched, getFieldProps, setFieldValue, isValid, values }) => (
         <Form className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           {/* Error Banner */}
           {error && (
@@ -239,9 +246,9 @@ export default function ProjectForm({ project, onSuccess }) {
               {...getFieldProps("category")}
               className="w-full p-2 border-2 rounded-md bg-background border-surfaceAlt"
             >
-              <option>Frontend</option>
-              <option>Backend</option>
-              <option>Fullstack</option>
+              <option value="frontend">Frontend</option>
+              <option value="backend">Backend</option>
+              <option value="fullstack">Fullstack</option>
             </Field>
             {errors.category && touched.category && (
               <div className="mt-1 text-sm text-error">{errors.category}</div>
@@ -357,7 +364,7 @@ export default function ProjectForm({ project, onSuccess }) {
                   />
                   <button
                     type="button"
-                    onClick={() => removeSubImage(i, setFieldValue)}
+                    onClick={() => removeSubImage(i, setFieldValue, values)}
                     className="absolute top-1 right-1 bg-error text-white p-1 rounded-full"
                   >
                     <X className="w-4 h-4" />

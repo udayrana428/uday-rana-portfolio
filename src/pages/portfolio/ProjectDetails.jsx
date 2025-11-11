@@ -15,6 +15,7 @@ import { delay } from "../../utils/helpers";
 import { getAllProjectsAPI } from "../../api";
 import { useProject } from "../../hooks/projects/useProjects";
 import { Helmet } from "react-helmet-async";
+import ProjectDetailsSkeleton from "../../components/common/ProjectDetailSkeleton";
 
 // export async function projectDetailsLoader({ params }) {
 //   try {
@@ -44,8 +45,8 @@ export default function ProjectDetails() {
   // const project = data?.data;
   console.log("project", project);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isLoading) return <ProjectDetailsSkeleton />;
+  // if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <>

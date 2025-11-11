@@ -50,8 +50,15 @@ export default function FeaturedProjects() {
             transition={{ type: "spring", stiffness: 300 }}
           >
             <img
-              src={project.mainImage.url || "/placeholder.svg"}
-              alt={project.title}
+              src={`${project?.mainImage?.url}?w=400&f=webp&q=auto`}
+              srcSet={`
+                ${project?.mainImage?.url}?w=400&f=webp&q=auto 400w,
+                ${project?.mainImage?.url}?w=800&f=webp&q=auto 800w,
+                ${project?.mainImage?.url}?w=1200&f=webp&q=auto 1200w
+              `}
+              sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+              alt={project?.title}
+              loading="lazy"
               className="h-48 w-full object-cover"
             />
             <div className="p-4 flex flex-col justify-between h-[calc(100%-12rem)]">
